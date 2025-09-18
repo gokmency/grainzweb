@@ -41,11 +41,12 @@ const ContentHub = () => {
           <img 
             src="/grainz-logo.png" 
             alt="GRAINZ LABS Logo" 
-            className="h-12 w-auto md:h-20 drop-shadow-lg select-none object-contain"
+            className="h-12 w-auto md:h-20 drop-shadow-lg select-none object-contain cursor-pointer hover:opacity-80 transition-opacity duration-200"
             style={{
               filter: 'brightness(0) saturate(100%) invert(12%) sepia(87%) saturate(5718%) hue-rotate(356deg) brightness(87%) contrast(109%)'
             }}
             draggable={false}
+            onClick={handleHomeClick}
           />
         </div>
       </header>
