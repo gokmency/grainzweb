@@ -47,7 +47,7 @@ const Index = () => {
     
     try {
       // İki farklı email adresine gönder
-      const emailAddresses = ['burakyzg@gmail.com', 'bgokmence@gmail.com'];
+          const emailAddresses = ['byuzguc@gmail.com', 'bgokmence@gmail.com', 'grainzguild@gmail.com'];
       
       // Her email adresi için ayrı ayrı gönder
       const promises = emailAddresses.map(async (email) => {
