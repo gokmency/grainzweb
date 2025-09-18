@@ -9,7 +9,45 @@ export interface BlogPost {
   author: string;
   image: string;
   tags: string[];
+  published: boolean;
+  featured?: boolean;
 }
+
+// Blog yönetimi için yardımcı fonksiyonlar
+export const createNewBlogPost = (
+  title: string,
+  excerpt: string,
+  content: string,
+  category: string,
+  author: string,
+  image: string,
+  tags: string[],
+  readTime?: string
+): BlogPost => {
+  const id = Date.now().toString();
+  const date = new Date().toISOString().split('T')[0];
+  const estimatedReadTime = readTime || `${Math.ceil(content.split(' ').length / 200)} min read`;
+  
+  return {
+    id,
+    title,
+    excerpt,
+    content,
+    date,
+    readTime: estimatedReadTime,
+    category,
+    author,
+    image,
+    tags,
+    published: true,
+    featured: false
+  };
+};
+
+export const addBlogPost = (newPost: BlogPost) => {
+  blogPosts.unshift(newPost); // Yeni post'u en başa ekle
+  return blogPosts;
+};
 
 export const blogCategories = [
   "All Articles",
@@ -82,8 +120,10 @@ export const blogPosts: BlogPost[] = [
     readTime: "5 min read",
     category: "Web3",
     author: "GRAINZ Team",
-    image: "/portfolio/development/project-1.jpg",
-    tags: ["Web3", "Gaming", "Blockchain", "NFT"]
+    image: "/blog-images/blog-1.jpg",
+    tags: ["Web3", "Gaming", "Blockchain", "NFT"],
+    published: true,
+    featured: true
   },
   {
     id: "2",
@@ -114,8 +154,9 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 min read",
     category: "Development",
     author: "Tech Team",
-    image: "/portfolio/development/project-2.jpg",
-    tags: ["NFT", "Development", "Architecture", "Scalability"]
+    image: "/blog-images/blog-2.jpg",
+    tags: ["NFT", "Development", "Architecture", "Scalability"],
+    published: true
   },
   {
     id: "3",
@@ -141,8 +182,9 @@ export const blogPosts: BlogPost[] = [
     readTime: "6 min read",
     category: "Community",
     author: "Community Team",
-    image: "/portfolio/community/project-1.jpg",
-    tags: ["Community", "Metaverse", "Engagement", "Strategy"]
+    image: "/blog-images/blog-3.jpg",
+    tags: ["Community", "Metaverse", "Engagement", "Strategy"],
+    published: true
   },
   {
     id: "4",
@@ -168,8 +210,9 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 min read",
     category: "Design",
     author: "Design Team",
-    image: "/portfolio/design/project-1.jpg",
-    tags: ["Design", "UX", "UI", "Immersive"]
+    image: "/blog-images/blog-4.jpg",
+    tags: ["Design", "UX", "UI", "Immersive"],
+    published: true
   },
   {
     id: "5",
@@ -195,8 +238,9 @@ export const blogPosts: BlogPost[] = [
     readTime: "10 min read",
     category: "Research",
     author: "Research Team",
-    image: "/portfolio/development/project-3.jpg",
-    tags: ["Gaming", "Economics", "DeFi", "Research"]
+    image: "/blog-images/blog-5.jpg",
+    tags: ["Gaming", "Economics", "DeFi", "Research"],
+    published: true
   },
   {
     id: "6",
@@ -222,16 +266,18 @@ export const blogPosts: BlogPost[] = [
     readTime: "6 min read",
     category: "Design",
     author: "UX Team",
-    image: "/portfolio/design/project-2.jpg",
-    tags: ["UX", "Blockchain", "Design", "Accessibility"]
+    image: "/blog-images/blog-6.jpg",
+    tags: ["UX", "Blockchain", "Design", "Accessibility"],
+    published: true
   }
 ];
 
 export const featuredPost = blogPosts[0];
 
 export const getPostsByCategory = (category: string): BlogPost[] => {
-  if (category === "All Articles") return blogPosts;
-  return blogPosts.filter(post => post.category === category);
+  const publishedPosts = blogPosts.filter(post => post.published);
+  if (category === "All Articles") return publishedPosts;
+  return publishedPosts.filter(post => post.category === category);
 };
 
 export const getPostById = (id: string): BlogPost | undefined => {

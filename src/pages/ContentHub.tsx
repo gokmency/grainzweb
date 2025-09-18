@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Calendar, Clock, ArrowRight, Search } from 'lucide-react';
-import { blogPosts, blogCategories, getPostsByCategory } from '@/data/blogData';
+import { Search } from 'lucide-react';
+import { blogCategories, getPostsByCategory } from '@/data/blogData';
 import { Waves } from '@/components/ui/waves-background';
 import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card-effect';
 
@@ -24,17 +23,6 @@ const ContentHub = () => {
     window.location.href = '/content-hub';
   };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'Web3': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'Development': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Community': return 'bg-green-100 text-green-800 border-green-200';
-      case 'Design': return 'bg-pink-100 text-pink-800 border-pink-200';
-      case 'Research': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'News': return 'bg-indigo-100 text-indigo-800 border-indigo-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
