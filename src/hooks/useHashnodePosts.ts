@@ -21,12 +21,12 @@ export function useHashnodePosts(args?: { first?: number; tagSlug?: string | nul
       if (!lastPage.pageInfo.hasNextPage) return undefined;
       return lastPage.pageInfo.endCursor ?? undefined;
     },
-    // Keep this fairly fresh so newly published Hashnode posts show up quickly without hard refresh.
+    // Keep data fresh without spamming the API (see Hashnode caching/rate limits docs).
+    // New posts will show up when user navigates back to Content Hub or focuses the tab.
     staleTime: 1000 * 30,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
-    refetchInterval: 1000 * 60,
-    refetchIntervalInBackground: false,
+    refetchInterval: false,
     retry: 1,
   });
 }
