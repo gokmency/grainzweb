@@ -23,7 +23,7 @@ const Navbar = () => {
             <img
               src="/grainz-logo.png"
               alt="GRAINZ Logo"
-              className="h-9 w-auto md:h-12 drop-shadow-lg select-none object-contain"
+              className="h-11 w-auto md:h-16 drop-shadow-lg select-none object-contain"
               style={
                 isContentHubPage
                   ? {
