@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { RefreshCw, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Waves } from '@/components/ui/waves-background';
 import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card-effect';
 import { useHashnodePosts } from '@/hooks/useHashnodePosts';
@@ -54,8 +54,7 @@ const ContentHub = () => {
       {/* Top Search Bar - Simple */}
       <section className="pt-24 md:pt-32 pb-6 px-6 md:px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-2">
-            <div className="relative max-w-md flex-1">
+          <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
@@ -64,15 +63,6 @@ const ContentHub = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-[#C8102E] focus:border-[#C8102E] transition-all"
             />
-          </div>
-            <button
-              onClick={() => postsQuery.refetch()}
-              className="h-9 w-9 flex items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors"
-              title="Refresh"
-              aria-label="Refresh articles"
-            >
-              <RefreshCw className={`w-4 h-4 text-gray-600 ${postsQuery.isFetching ? "animate-spin" : ""}`} />
-            </button>
           </div>
         </div>
       </section>
