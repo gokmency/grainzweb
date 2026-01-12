@@ -21,7 +21,12 @@ export function useHashnodePosts(args?: { first?: number; tagSlug?: string | nul
       if (!lastPage.pageInfo.hasNextPage) return undefined;
       return lastPage.pageInfo.endCursor ?? undefined;
     },
-    staleTime: 1000 * 60 * 5,
+    // Keep this fairly fresh so newly published Hashnode posts show up quickly without hard refresh.
+    staleTime: 1000 * 30,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    refetchInterval: 1000 * 60,
+    refetchIntervalInBackground: false,
     retry: 1,
   });
 }
