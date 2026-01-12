@@ -1,23 +1,48 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, ArrowRight, Share2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { getPostById, getRelatedPosts } from '@/data/blogData';
+import { ArrowLeft, Calendar, Clock, Share2 } from 'lucide-react';
 import { Waves } from '@/components/ui/waves-background';
+import { useHashnodePost } from '@/hooks/useHashnodePost';
+import { useHashnodePosts } from '@/hooks/useHashnodePosts';
 
 const BlogDetail = () => {
-  const { id } = useParams();
-  
-  const blogPost = getPostById(id || '');
-  const relatedPosts = blogPost ? getRelatedPosts(blogPost.id, blogPost.category) : [];
+  const { slug } = useParams();
 
-  const handleHomeClick = () => {
-    window.location.href = '/';
-  };
+  const postQuery = useHashnodePost(slug);
+  const blogPost = postQuery.data ?? null;
 
-  const handleContentHubClick = () => {
-    window.location.href = '/content-hub';
-  };
+  const firstTagSlug = blogPost?.tags?.[0]?.slug ?? null;
+  const relatedQuery = useHashnodePosts({ first: 6, tagSlug: firstTagSlug });
+  const relatedPosts = (relatedQuery.data?.pages ?? [])
+    .flatMap((p) => p.edges.map((e) => e.node))
+    .filter((p) => p.slug !== blogPost?.slug)
+    .slice(0, 3);
+
+  if (postQuery.isLoading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center px-6">
+        <div className="text-center">
+          <p className="text-gray-600">Loading article…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (postQuery.isError) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center px-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Couldn’t load article</h1>
+          <button
+            onClick={() => postQuery.refetch()}
+            className="text-[#C8102E] hover:underline"
+          >
+            Try again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (!blogPost) {
     return (
@@ -32,18 +57,6 @@ const BlogDetail = () => {
     );
   }
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'Web3': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'Development': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Community': return 'bg-green-100 text-green-800 border-green-200';
-      case 'Design': return 'bg-pink-100 text-pink-800 border-pink-200';
-      case 'Research': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'News': return 'bg-indigo-100 text-indigo-800 border-indigo-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
       {/* Waves Animation Background */}
@@ -53,41 +66,6 @@ const BlogDetail = () => {
           backgroundColor="transparent"
           pointerSize={0.15}
         />
-      </div>
-
-      {/* Header - Logo (responsive) */}
-      <header className="absolute top-4 left-4 md:top-8 md:left-16 z-10">
-        <div className="flex items-center">
-          <img 
-            src="/grainz-logo.png" 
-            alt="GRAINZ LABS Logo" 
-            className="h-12 w-auto md:h-20 drop-shadow-lg select-none object-contain"
-            style={{
-              filter: 'brightness(0) saturate(100%) invert(12%) sepia(87%) saturate(5718%) hue-rotate(356deg) brightness(87%) contrast(109%)'
-            }}
-            draggable={false}
-          />
-        </div>
-      </header>
-
-      {/* Top Center Navigation */}
-      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="flex items-center border-2 border-[#C8102E] overflow-hidden">
-          <button
-            onClick={handleHomeClick}
-            className="bg-transparent text-[#C8102E] px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out hover:bg-[#C8102E]/10 border-r border-[#C8102E]/30"
-            style={{ fontFamily: "'Tomorrow', sans-serif" }}
-          >
-            Home
-          </button>
-          <button
-            onClick={handleContentHubClick}
-            className="bg-[#C8102E] text-white px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out hover:bg-[#C8102E]/90"
-            style={{ fontFamily: "'Tomorrow', sans-serif" }}
-          >
-            Content Hub
-          </button>
-        </div>
       </div>
 
       {/* Back Navigation */}
@@ -109,11 +87,13 @@ const BlogDetail = () => {
           {/* Article Header */}
           <header className="mb-8">
             <div className="mb-6">
-              <span 
-                className={`inline-block px-3 py-1 rounded-full text-xs font-semibold border ${getCategoryColor(blogPost.category)} mb-4`}
-              >
-                {blogPost.category}
-              </span>
+              {blogPost.tags?.[0] && (
+                <span
+                  className="inline-block px-3 py-1 rounded-full text-xs font-semibold border bg-gray-100 text-gray-800 border-gray-200 mb-4"
+                >
+                  {blogPost.tags[0].name}
+                </span>
+              )}
             </div>
             
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -123,7 +103,7 @@ const BlogDetail = () => {
             <div className="flex items-center text-gray-500 text-sm gap-6 mb-8 flex-wrap">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                <span>{new Date(blogPost.date).toLocaleDateString('en-US', { 
+                <span>{new Date(blogPost.publishedAt).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
@@ -131,17 +111,17 @@ const BlogDetail = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                <span>{blogPost.readTime}</span>
+                <span>{blogPost.readTimeInMinutes} min read</span>
               </div>
               <div>
-                By {blogPost.author}
+                By {blogPost.author?.name || blogPost.author?.username}
               </div>
               <button 
                 onClick={() => navigator.share ? navigator.share({
                   title: blogPost.title,
-                  text: blogPost.excerpt,
-                  url: window.location.href
-                }) : navigator.clipboard.writeText(window.location.href)}
+                  text: blogPost.brief,
+                  url: blogPost.url || window.location.href
+                }) : navigator.clipboard.writeText(blogPost.url || window.location.href)}
                 className="flex items-center gap-1 text-[#C8102E] hover:text-[#A00E28] transition-colors"
               >
                 <Share2 className="w-4 h-4" />
@@ -152,7 +132,7 @@ const BlogDetail = () => {
             {/* Featured Image */}
             <div className="aspect-video overflow-hidden rounded-xl mb-8 border border-gray-200">
               <img 
-                src={blogPost.image} 
+                src={blogPost.coverImage?.url || "/placeholder.svg"} 
                 alt={blogPost.title}
                 className="w-full h-full object-cover"
               />
@@ -163,7 +143,7 @@ const BlogDetail = () => {
           <div className="bg-white">
             <div 
               className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: blogPost.content }}
+              dangerouslySetInnerHTML={{ __html: blogPost.contentHtml }}
             />
           </div>
 
@@ -172,10 +152,10 @@ const BlogDetail = () => {
             <div className="flex flex-wrap gap-2">
               {blogPost.tags.map((tag) => (
                 <span 
-                  key={tag}
+                  key={tag.slug}
                   className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
                 >
-                  {tag}
+                  {tag.name}
                 </span>
               ))}
             </div>
@@ -187,11 +167,11 @@ const BlogDetail = () => {
               <h3 className="text-2xl font-bold text-gray-900 mb-8">Related Articles</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {relatedPosts.map((post) => (
-                  <Link to={`/content-hub/article/${post.id}`} key={post.id}>
+                  <Link to={`/content-hub/article/${post.slug}`} key={post.id}>
                     <article className="bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-all duration-300 group">
                       <div className="aspect-video overflow-hidden rounded-t-xl">
                         <img 
-                          src={post.image} 
+                          src={post.coverImage?.url || "/placeholder.svg"} 
                           alt={post.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -201,11 +181,11 @@ const BlogDetail = () => {
                           {post.title}
                         </h4>
                         <p className="text-gray-600 text-sm line-clamp-2 mb-3">
-                          {post.excerpt}
+                          {post.brief}
                         </p>
                         <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span>{post.readTime}</span>
-                          <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                          <span>{post.readTimeInMinutes} min read</span>
+                          <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                         </div>
                       </div>
                     </article>

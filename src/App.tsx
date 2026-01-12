@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Navbar from "./components/Navbar";
 import Index from "./pages/Index";
 import ContentHub from "./pages/ContentHub";
 import BlogDetail from "./pages/BlogDetail";
@@ -23,10 +24,11 @@ const App = () => (
             v7_relativeSplatPath: true
           }}
         >
+          <Navbar />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/content-hub" element={<ContentHub />} />
-            <Route path="/content-hub/article/:id" element={<BlogDetail />} />
+            <Route path="/content-hub/article/:slug" element={<BlogDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

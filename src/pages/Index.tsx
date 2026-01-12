@@ -108,14 +108,6 @@ const Index = () => {
     window.open('https://x.com/grainzeth', '_blank');
   };
 
-  const handleHomeClick = () => {
-    window.location.href = '/';
-  };
-
-  const handleContentHubClick = () => {
-    window.location.href = '/content-hub';
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#C8102E] to-[#E53E3E] relative flex flex-col" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
       {/* Waves Animation Background */}
@@ -125,38 +117,6 @@ const Index = () => {
           backgroundColor="transparent"
           pointerSize={0.3}
         />
-      </div>
-
-      {/* Header - Logo (responsive) */}
-      <header className="absolute top-4 left-4 md:top-8 md:left-16 z-10">
-        <div className="flex items-center">
-          <img 
-            src="/grainz-logo.png" 
-            alt="GRAINZ LABS Logo" 
-            className="h-12 w-auto md:h-20 drop-shadow-lg select-none object-contain"
-            draggable={false}
-          />
-        </div>
-      </header>
-
-      {/* Top Center Navigation */}
-      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="flex items-center border-2 border-white overflow-hidden">
-          <button
-            onClick={handleHomeClick}
-            className="bg-white text-[#C8102E] px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out hover:bg-white/90 border-r border-white/30"
-            style={{ fontFamily: "'Tomorrow', sans-serif" }}
-          >
-            Home
-          </button>
-          <button
-            onClick={handleContentHubClick}
-            className="bg-transparent text-white px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out hover:bg-white/10"
-            style={{ fontFamily: "'Tomorrow', sans-serif" }}
-          >
-            Content Hub
-          </button>
-        </div>
       </div>
 
       {/* Desktop Layout */}
@@ -267,7 +227,7 @@ const Index = () => {
 
       {/* Mobile Layout - Fit to Screen */}
       <div className="block md:hidden h-screen flex flex-col">
-        <div className="flex-1 px-4 pt-32 pb-4 space-y-4 z-10 relative">
+        <div className="flex-1 px-4 pt-24 pb-4 space-y-4 z-10 relative">
           {/* Mobile Main Title */}
           <div className="text-center mb-4">
             <h1
