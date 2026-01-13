@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, Share2 } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 import { Waves } from '@/components/ui/waves-background';
 import { useHashnodePost } from '@/hooks/useHashnodePost';
 import { useHashnodePosts } from '@/hooks/useHashnodePosts';
@@ -59,6 +60,30 @@ const BlogDetail = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
+      {blogPost && (
+        <Helmet>
+          <title>{blogPost.title} | Grainz</title>
+          <meta name="description" content={blogPost.brief} />
+          <link rel="canonical" href={`https://grainz.site/content-hub/article/${blogPost.slug}`} />
+
+          <meta property="og:title" content={blogPost.title} />
+          <meta property="og:description" content={blogPost.brief} />
+          <meta property="og:image" content={blogPost.coverImage?.url || "https://grainz.site/grainz-logo.png"} />
+          <meta property="og:url" content={`https://grainz.site/content-hub/article/${blogPost.slug}`} />
+          <meta property="og:type" content="article" />
+
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={blogPost.title} />
+          <meta name="twitter:description" content={blogPost.brief} />
+          <meta name="twitter:image" content={blogPost.coverImage?.url || "https://grainz.site/grainz-logo.png"} />
+
+          {blogPost.publishedAt && <meta property="article:published_time" content={blogPost.publishedAt} />}
+          {blogPost.tags?.map(tag => (
+            <meta property="article:tag" content={tag.name} key={tag.slug} />
+          ))}
+        </Helmet>
+      )}
+
       {/* Waves Animation Background */}
       <div className="absolute inset-0 z-0">
         <Waves

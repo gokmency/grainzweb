@@ -142,6 +142,9 @@ const ContentHub = () => {
               {postsQuery.isError && (
                 <div className="py-16 text-center">
                   <p className="text-gray-700 mb-4">Articles couldn’t be loaded.</p>
+                  <p className="text-xs text-red-500 mb-4 max-w-md mx-auto">
+                    {postsQuery.error instanceof Error ? postsQuery.error.message : "Connection error"}
+                  </p>
                   <button
                     onClick={() => postsQuery.refetch()}
                     className="px-4 py-2 text-sm bg-[#C8102E] text-white rounded-lg hover:bg-[#C8102E]/90 transition-colors"
