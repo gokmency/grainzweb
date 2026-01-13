@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import { Waves } from '@/components/ui/waves-background';
 import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card-effect';
 import { useHashnodePosts } from '@/hooks/useHashnodePosts';
+import SEO from '@/components/SEO';
 
 const ContentHub = () => {
   const [selectedTagSlug, setSelectedTagSlug] = useState<string | null>(null);
@@ -42,6 +43,11 @@ const ContentHub = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
+      <SEO
+        title="Content Hub"
+        description="Explore the latest articles, insights, and news from GRAINZ."
+        url="https://grainz.site/content-hub"
+      />
       {/* Waves Animation Background */}
       <div className="absolute inset-0 z-0">
         <Waves
