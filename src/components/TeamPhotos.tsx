@@ -169,7 +169,7 @@ const TeamPhotos: React.FC = () => {
               >
                 <img
                   src={member.photo}
-                  alt={member.name}
+                  alt={`${member.name} - ${member.role} at Grainz`}
                   className={`w-full h-full object-cover transition-all duration-200 ${
                     isHovered ? "grayscale-0" : "grayscale hover:grayscale-0"
                   }`}
@@ -205,7 +205,7 @@ const TeamPhotos: React.FC = () => {
               >
                 <img
                   src={member.photo}
-                  alt={member.name}
+                  alt={`${member.name} - ${member.role} at Grainz`}
                   className={`w-full h-full object-cover transition-all duration-200 ${
                     isHovered ? "grayscale-0" : "grayscale hover:grayscale-0"
                   }`}
@@ -242,7 +242,7 @@ const TeamPhotos: React.FC = () => {
             >
               <img
                 src={member.photo}
-                alt={member.name}
+                alt={`${member.name} - ${member.role} at Grainz`}
                 className={`w-full h-full object-cover transition-all duration-200 ${
                   isHovered ? "grayscale-0" : "grayscale hover:grayscale-0"
                 }`}
