@@ -5,24 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/grainz-logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grainz — We Build Things | Design, Development & Community Studio</title>
-    <meta name="description" content="Grainz is a build-oriented studio focused on design, development, and community-driven structures. We build products, systems, and long-term digital foundations." />
+    <meta name="description" content="Grainz is a build-oriented studio that designs, develops, and builds digital products, systems, and community-driven structures. We build products, systems, and long-term digital foundations." />
     <link rel="canonical" href="https://grainz.site" />
-    <meta name="keywords" content="Web3, Gaming, Development, Design, Community, Blockchain, NFT, Grainz" />
+    <meta name="keywords" content="Web3, Gaming, Development, Design, Community, Blockchain, NFT, Grainz, Grainz Studio" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Grainz" />
     <meta property="og:url" content="https://grainz.site" />
     <meta property="og:title" content="Grainz — We Build Things | Design, Development & Community Studio" />
-    <meta property="og:description" content="Grainz is a build-oriented studio focused on design, development, and community-driven structures. We build products, systems, and long-term digital foundations." />
-    <meta property="og:image" content="/grainz-logo.png" />
+    <meta property="og:description" content="Grainz is a build-oriented studio that designs, develops, and builds digital products, systems, and community-driven structures. We build products, systems, and long-term digital foundations." />
+    <meta property="og:image" content="https://grainz.site/grainz-logo.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://grainz.site" />
     <meta property="twitter:title" content="Grainz — We Build Things | Design, Development & Community Studio" />
-    <meta property="twitter:description" content="Grainz is a build-oriented studio focused on design, development, and community-driven structures. We build products, systems, and long-term digital foundations." />
-    <meta property="twitter:image" content="/grainz-logo.png" />
+    <meta property="twitter:description" content="Grainz is a build-oriented studio that designs, develops, and builds digital products, systems, and community-driven structures. We build products, systems, and long-term digital foundations." />
+    <meta property="twitter:image" content="https://grainz.site/grainz-logo.png" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -33,9 +33,16 @@
           "@type": "Organization",
           "@id": "https://grainz.site/#organization",
           "name": "Grainz",
+          "alternateName": "Grainz Studio",
           "url": "https://grainz.site",
           "description": "Grainz is a build-oriented studio that designs, develops, and builds digital products, systems, and community-driven structures.",
-          "logo": "https://grainz.site/grainz-logo.png",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://grainz.site/grainz-logo.png",
+            "width": "512",
+            "height": "512",
+            "caption": "Grainz Studio Logo"
+          },
           "founders": [
             { "@id": "https://grainz.site/#person-burak-gokmen-celik" },
             { "@id": "https://grainz.site/#person-burak-yuzguc" }
@@ -49,7 +56,8 @@
           "@type": "Brand",
           "@id": "https://grainz.site/#brand",
           "name": "Grainz",
-          "url": "https://grainz.site"
+          "url": "https://grainz.site",
+          "logo": "https://grainz.site/grainz-logo.png"
         },
         {
           "@type": "WebSite",
@@ -64,7 +72,8 @@
           "url": "https://grainz.site",
           "name": "Grainz — We Build Things | Design, Development & Community Studio",
           "isPartOf": { "@id": "https://grainz.site/#website" },
-          "about": { "@id": "https://grainz.site/#organization" }
+          "about": { "@id": "https://grainz.site/#organization" },
+          "primaryImageOfPage": { "@id": "https://grainz.site/#organization/logo" }
         },
         {
           "@type": "Person",
@@ -72,7 +81,16 @@
           "name": "Burak Gökmen Çelik",
           "jobTitle": "Founder & Developer",
           "worksFor": { "@id": "https://grainz.site/#organization" },
-          "description": "Founder and developer at Grainz, focused on technical production, system architecture, and scalable digital development."
+          "description": "Founder and developer at Grainz, focused on technical production, system architecture, and scalable digital development.",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://grainz.site/team/gokmen.jpg",
+            "caption": "Burak Gökmen Çelik - Founder & Developer at Grainz"
+          },
+          "sameAs": [
+            "https://x.com/gokmeneth",
+            "https://www.linkedin.com/in/gokmencelik/"
+          ]
         },
         {
           "@type": "Person",
@@ -80,7 +98,54 @@
           "name": "Burak Yüzgüç",
           "jobTitle": "Founder & Designer",
           "worksFor": { "@id": "https://grainz.site/#organization" },
-          "description": "Founder and designer at Grainz, responsible for visual identity, design language, and brand experience."
+          "description": "Founder and designer at Grainz, responsible for visual identity, design language, and brand experience.",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://grainz.site/team/burak.jpg",
+            "caption": "Burak Yüzgüç - Founder & Designer at Grainz"
+          },
+          "sameAs": [
+            "https://x.com/100guc",
+            "https://www.linkedin.com/in/burakyuzguc"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://grainz.site/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is Grainz?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Grainz is a build-oriented studio that designs, develops, and builds digital products, systems, and community-driven structures."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Who founded Grainz?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Grainz was founded by Burak Gökmen Çelik (Developer) and Burak Yüzgüç (Designer)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What does Grainz build?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Grainz builds digital products, technical systems, design languages, and community infrastructures."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Grainz a studio or an agency?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Grainz is a studio. It operates with a studio mindset focused on long-term building and product creation, rather than just service-based agency work."
+              }
+            }
+          ]
         }
       ]
     }

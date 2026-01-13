@@ -208,7 +208,7 @@ const Index = () => {
         </div>
 
         {/* Copyright notice - Desktop */}
-        <div className="absolute bottom-2 left-0 w-full z-50 pointer-events-auto">
+        <div className="absolute bottom-2 left-0 w-full z-50 pointer-events-auto" role="contentinfo">
           <p className="text-center text-xs text-white/70 tracking-wide px-4" style={{
             textShadow: "0 2px 8px rgba(44,0,0,0.18)",
             fontFamily: "'Tomorrow', sans-serif"
@@ -310,7 +310,7 @@ const Index = () => {
         </div>
 
         {/* Copyright notice - Mobile */}
-        <div className="py-2 z-50 pointer-events-auto">
+        <div className="py-2 z-50 pointer-events-auto" role="contentinfo">
           <p className="text-center text-xs text-white/70 tracking-wide px-4" style={{
             textShadow: "0 2px 8px rgba(44,0,0,0.18)",
             fontFamily: "'Tomorrow', sans-serif"
