@@ -1,6 +1,7 @@
 export const HASHNODE_ENDPOINT = "https://gql.hashnode.com/graphql";
 // Custom domain host works on Hashnode GraphQL and avoids confusion with www/subdomain.
-export const HASHNODE_HOST = (import.meta as any).env?.VITE_HASHNODE_HOST || "grainz.site";
+// We default to "grainz.hashnode.dev" to ensure we can fetch data even if the custom domain isn't fully propagated on Hashnode's side or during dev.
+export const HASHNODE_HOST = (import.meta as any).env?.VITE_HASHNODE_HOST || "grainz.hashnode.dev";
 
 export type HashnodeTag = {
   name: string;

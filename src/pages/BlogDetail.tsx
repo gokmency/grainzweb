@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, Clock, Share2 } from 'lucide-react';
 import { Waves } from '@/components/ui/waves-background';
 import { useHashnodePost } from '@/hooks/useHashnodePost';
 import { useHashnodePosts } from '@/hooks/useHashnodePosts';
+import SEO from '@/components/SEO';
 
 const BlogDetail = () => {
   const { slug } = useParams();
@@ -21,6 +22,7 @@ const BlogDetail = () => {
   if (postQuery.isLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center px-6">
+        <SEO title="Loading..." />
         <div className="text-center">
           <p className="text-gray-600">Loading article…</p>
         </div>
@@ -31,6 +33,7 @@ const BlogDetail = () => {
   if (postQuery.isError) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center px-6">
+        <SEO title="Error" />
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Couldn’t load article</h1>
           <button
@@ -47,6 +50,7 @@ const BlogDetail = () => {
   if (!blogPost) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
+        <SEO title="Article Not Found" />
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Article not found</h1>
           <Link to="/content-hub" className="text-[#C8102E] hover:underline">
@@ -59,6 +63,15 @@ const BlogDetail = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
+      <SEO
+        title={blogPost.title}
+        description={blogPost.brief}
+        image={blogPost.coverImage?.url}
+        url={`https://grainz.site/content-hub/article/${blogPost.slug}`}
+        type="article"
+        publishedTime={blogPost.publishedAt}
+        author={blogPost.author.name}
+      />
       {/* Waves Animation Background */}
       <div className="absolute inset-0 z-0">
         <Waves
