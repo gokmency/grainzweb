@@ -109,7 +109,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#C8102E] to-[#E53E3E] relative flex flex-col" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
+    <div className="min-h-screen bg-gradient-to-br from-[#C8102E] to-[#E53E3E] relative flex flex-col" style={{ fontFamily: "'Tomorrow', sans-serif" }} role="main">
       {/* Waves Animation Background */}
       <div className="absolute inset-0 z-0">
         <Waves
@@ -155,7 +155,7 @@ const Index = () => {
           <p className="text-white mb-6 leading-relaxed" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
             We design, develop, and build innovative solutions while nurturing and managing vibrant communities that drive meaningful engagement and growth.
           </p>
-          <OutlineButton onClick={handleFollowUsClick}>
+          <OutlineButton onClick={handleFollowUsClick} aria-label="Follow Grainz on X">
             <div className="flex items-center justify-between w-full text-sm font-medium" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
               <span>FOLLOW US</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="ml-2">
@@ -164,7 +164,7 @@ const Index = () => {
             </div>
           </OutlineButton>
           <div className="mt-4">
-            <OutlineButton onClick={handleContactUsClick}>
+            <OutlineButton onClick={handleContactUsClick} aria-label="Contact Grainz">
               <div className="flex items-center justify-between w-full text-sm font-medium" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
                 <span>CONTACT WITH US</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="ml-2">
@@ -217,6 +217,7 @@ const Index = () => {
             <button 
               onClick={handleGrainzClick}
               className="underline hover:text-white transition-colors cursor-pointer"
+              aria-label="Visit Grainz X (Twitter) profile"
             >
               GRAINZ
             </button>
@@ -254,12 +255,12 @@ const Index = () => {
               We design, develop, and build innovative solutions while nurturing communities.
             </p>
             <div className="flex justify-center">
-              <OutlineButton onClick={handleFollowUsClick}>
+              <OutlineButton onClick={handleFollowUsClick} aria-label="Follow Grainz on X">
                 <span className="text-xs">FOLLOW US</span>
               </OutlineButton>
             </div>
             <div className="flex justify-center mt-3">
-              <OutlineButton onClick={handleContactUsClick}>
+              <OutlineButton onClick={handleContactUsClick} aria-label="Contact Grainz">
                 <span className="text-xs">CONTACT WITH US</span>
               </OutlineButton>
             </div>
@@ -318,6 +319,7 @@ const Index = () => {
             <button 
               onClick={handleGrainzClick}
               className="underline hover:text-white transition-colors cursor-pointer"
+              aria-label="Visit Grainz X (Twitter) profile"
             >
               GRAINZ
             </button>
