@@ -51,7 +51,7 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 w-full h-full relative z-20">
           
           {/* Left Column Area */}
-          <div className="col-span-1 md:col-span-4 flex flex-col justify-between h-full space-y-4 md:space-y-0 order-2 md:order-1 pt-0 md:pt-32">
+          <div className="col-span-1 md:col-span-4 flex flex-col justify-between h-full space-y-4 md:space-y-0 order-2 md:order-1 pt-0 md:pt-32 pb-0 md:pb-20">
 
             {/* Top Left - What We Do */}
             <div className="md:mb-auto">

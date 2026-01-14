@@ -27,25 +27,25 @@ export const WorkWithUs: React.FC = () => {
   };
 
   return (
-    <div className="md:max-w-sm w-full bg-black/10 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none rounded-lg md:rounded-none p-3 md:p-0 border md:border-none border-white/20">
+    <div className="w-full md:max-w-sm bg-black/10 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none rounded-lg md:rounded-none p-3 md:p-0 border md:border-none border-white/20">
       <h2
         className="text-sm md:text-lg font-bold text-white mb-2 md:mb-4 text-center md:text-left"
         style={{ letterSpacing: '2px', fontFamily: "'Tomorrow', sans-serif" }}
       >
         {CONFIG.text.workWithUs.title}
       </h2>
-      <div className="grid grid-cols-2 gap-2 md:gap-3 max-w-xs md:max-w-none mx-auto md:mx-0">
+      <div className="grid grid-cols-2 gap-2 md:gap-3 mx-auto md:mx-0">
         <OutlineButton onClick={handleDesignClick} className="w-full">
-          <span className="block text-xs md:text-sm">Design</span>
+          Design
         </OutlineButton>
         <OutlineButton onClick={handleDevelopmentClick} className="w-full">
-          <span className="block text-xs md:text-sm">Development</span>
+          Development
         </OutlineButton>
         <OutlineButton onClick={handleCommunityClick} className="w-full">
-          <span className="block text-xs md:text-sm">Community</span>
+          Community
         </OutlineButton>
         <OutlineButton onClick={handleJoinTeamClick} className="w-full">
-          <span className="block text-xs md:text-sm">Join our team</span>
+          Join our team
         </OutlineButton>
       </div>
     </div>
