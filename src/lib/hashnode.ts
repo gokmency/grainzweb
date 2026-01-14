@@ -3,10 +3,26 @@ export const HASHNODE_ENDPOINT = "https://gql.hashnode.com/graphql";
 // We default to "grainz.hashnode.dev" to ensure we can fetch data even if the custom domain isn't fully propagated on Hashnode's side or during dev.
 // We explicitly ignore "grainz.site" because it is the target host, not the source host, and using it often causes "publication not found" errors.
 const envHost = (import.meta as any).env?.VITE_HASHNODE_HOST;
+
+const cleanHost = (host: string | undefined) => {
+  if (!host) return null;
+  // Remove protocol, www, trailing slashes, and whitespace
+  let cleaned = host
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .replace(/\/$/, "")
+    .trim();
+  return cleaned;
+};
+
+const cleanedEnvHost = cleanHost(envHost);
+
 export const HASHNODE_HOST =
-  envHost && envHost !== "grainz.site" && envHost !== "www.grainz.site"
-    ? envHost
+  cleanedEnvHost && cleanedEnvHost !== "grainz.site"
+    ? cleanedEnvHost
     : "grainz.hashnode.dev";
+
+console.log("[Hashnode] Configured Host:", HASHNODE_HOST, "(Env:", envHost, ")");
 
 export type HashnodeTag = {
   name: string;
