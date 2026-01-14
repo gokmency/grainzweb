@@ -13,11 +13,11 @@ const BlogDetail = () => {
   const blogPost = postQuery.data ?? null;
 
   const firstTagSlug = blogPost?.tags?.[0]?.slug ?? null;
-  const relatedQuery = useHashnodePosts({ first: 6, tagSlug: firstTagSlug });
+  const relatedQuery = useHashnodePosts({ first: 12, tagSlug: firstTagSlug });
   const relatedPosts = (relatedQuery.data?.pages ?? [])
     .flatMap((p) => p.edges.map((e) => e.node))
     .filter((p) => p.slug !== blogPost?.slug)
-    .slice(0, 3);
+    .slice(0, 6);
 
   if (postQuery.isLoading) {
     return (
