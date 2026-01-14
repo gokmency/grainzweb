@@ -1,4 +1,5 @@
 import { Marquee } from "@/components/ui/marquee"
+import { CONFIG } from "@/config/constants";
 
 // Brand logos - loaded from /public/brands/ directory
 const BrandLogos = {
@@ -66,20 +67,36 @@ export function WorksWith() {
     <div className="w-full">
       <h2 
         className="text-sm md:text-lg font-bold text-white mb-3 md:mb-4 text-center md:text-left"
-        style={{ letterSpacing: '1px md:2px', fontFamily: "'Tomorrow', sans-serif" }}
+        style={{ letterSpacing: '2px', fontFamily: "'Tomorrow', sans-serif" }}
       >
-        WORKED WITH
+        {CONFIG.text.workedWith.title}
       </h2>
-      <Marquee speed={20} pauseOnHover className="sm:mt-0 mt-0">
+
+      {/* Desktop Marquee */}
+      <div className="hidden md:block">
+        <Marquee speed={20} pauseOnHover className="sm:mt-0 mt-0">
+          {partners.map((Partner, index) => (
+            <div
+              key={index}
+              className="relative h-full w-fit mx-6 md:mx-12 flex items-center justify-center"
+            >
+              <Partner />
+            </div>
+          ))}
+        </Marquee>
+      </div>
+
+      {/* Mobile Grid */}
+      <div className="md:hidden grid grid-cols-3 gap-4 items-center justify-center">
         {partners.map((Partner, index) => (
           <div
             key={index}
-            className="relative h-full w-fit mx-6 md:mx-12 flex items-center justify-center"
+            className="flex items-center justify-center"
           >
             <Partner />
           </div>
         ))}
-      </Marquee>
+      </div>
     </div>
   )
 }

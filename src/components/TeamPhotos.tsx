@@ -1,71 +1,6 @@
 import React, { useState, useRef } from "react";
 import { createPortal } from "react-dom";
-
-// Team member data with organized photo structure
-const teamMembers = [
-  {
-    id: 1,
-    name: "Gökmen",
-    role: "Developer",
-    photo: "/team/gokmen.jpg",
-    bio: `Gökmen previously worked on the community side of Web3 projects; these days, he’s a “vibe coder” constantly building new things. He’s also on his way to becoming a computer engineer.
-He writes code, but somehow ends up building ideas too.`,
-    twitter: "https://x.com/gokmeneth",
-    linkedin: "https://www.linkedin.com/in/gokmencelik/"
-  },
-  {
-    id: 3,
-    name: "Sefercan",
-    role: "Researcher",
-    photo: "/team/sefercan.jpg",
-    bio: "Sefercan primarily studies medicine, but contributes here by exploring emerging technologies and shaping project strategies. Balances med school by day and future tech by night.",
-    twitter: "https://x.com/sefercan"
-   
-  },
-  {
-    id: 6,
-    name: "Ercan",
-    role: "Researcher",
-    photo: "/team/ercan.jpg",
-    bio: "Ercan is mainly focused on medical school, while supporting the team with research on technological trends and experimental approaches. Studies anatomy but somehow keeps building roadmaps.",
-    twitter: "https://x.com/ercan"
-  },
-  {
-    id: 4,
-    name: "Maslak",
-    role: "Analyst",
-    photo: "/team/maslak.jpg",
-    bio: "Maslak analyzes business processes and develops models to improve operational efficiency, building on his industrial engineering background. Speaks fluent Excel and turns chaos into clean tables.",
-    twitter: "https://x.com/maslak"
-  },
-  {
-    id: 5,
-    name: "Burak",
-    role: "Designer", 
-    photo: "/team/burak.jpg",
-    bio: "With an industrial design background, Burak leads modeling and interface design processes, and has recently been exploring yacht design. Sketches ideas first, then brings them to life.",
-    twitter: "https://x.com/100guc",
-    linkedin: "https://www.linkedin.com/in/burakyuzguc"
-    
-  },
-  {
-    id: 2,
-    name: "Akman",
-    role: "Researcher",
-    photo: "/team/berkay.jpg",
-    bio: "Akman mainly focuses on medical school, while supporting the team with research on emerging trends and innovative strategies. Studies medicine full-time, predicts the future part-time.",
-    twitter: "https://x.com/Akmangrainz"
-    
-  },
-  {
-    id: 7,
-    name: "Ceyhun",
-    role: "Intern",
-    photo: "/team/ceyhun.jpg",
-    bio: "Doesn’t know much yet, but learning fast.",
-    twitter: "https://x.com/grainzeth"
-  },
-];
+import { TEAM_MEMBERS } from "../config/constants";
 
 const TeamPhotos: React.FC = () => {
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
@@ -127,7 +62,7 @@ const TeamPhotos: React.FC = () => {
 
 
   const handleTwitterClick = (memberId: number) => {
-    const member = teamMembers.find(m => m.id === memberId);
+    const member = TEAM_MEMBERS.find(m => m.id === memberId);
     if (member?.twitter) {
       window.open(member.twitter, '_blank');
     }
@@ -135,7 +70,7 @@ const TeamPhotos: React.FC = () => {
   };
 
   const handleLinkedInClick = (memberId: number) => {
-    const member = teamMembers.find(m => m.id === memberId);
+    const member = TEAM_MEMBERS.find(m => m.id === memberId);
     if (member?.linkedin) {
       window.open(member.linkedin, '_blank');
     }
@@ -143,8 +78,8 @@ const TeamPhotos: React.FC = () => {
   };
 
   // Split team members: first 4 in left column, remaining 3 in right column
-  const leftColumnMembers = teamMembers.slice(0, 4);
-  const rightColumnMembers = teamMembers.slice(4, 7);
+  const leftColumnMembers = TEAM_MEMBERS.slice(0, 4);
+  const rightColumnMembers = TEAM_MEMBERS.slice(4, 7);
 
   return (
     <div className="relative">
@@ -225,7 +160,7 @@ const TeamPhotos: React.FC = () => {
 
       {/* Mobile Grid Layout */}
       <div className="grid md:hidden grid-cols-4 gap-1 max-w-[200px] mx-auto">
-        {teamMembers.map((member) => {
+        {TEAM_MEMBERS.map((member) => {
           const isHovered = member.id === hoveredMember;
           
           return (
@@ -283,7 +218,7 @@ const TeamPhotos: React.FC = () => {
             {/* Social Media buttons */}
             <div className="absolute right-3 top-3 flex gap-2">
               {/* LinkedIn button */}
-              {teamMembers.find(m => m.id === hoveredMember)?.linkedin && (
+              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.linkedin && (
                 <button
                   onClick={() => handleLinkedInClick(hoveredMember)}
                   className="w-6 h-6 text-gray-400 hover:text-blue-700 transition-colors z-10 flex items-center justify-center rounded-full hover:bg-gray-100"
@@ -309,17 +244,17 @@ const TeamPhotos: React.FC = () => {
 
             {/* Name */}
             <div className="font-bold text-xl mb-1 text-gray-900" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {teamMembers.find(m => m.id === hoveredMember)?.name}
+              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.name}
             </div>
             
             {/* Role */}
             <div className="font-semibold text-[#C8102E] mb-4 text-sm uppercase tracking-wide" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {teamMembers.find(m => m.id === hoveredMember)?.role}
+              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.role}
             </div>
             
             {/* Bio */}
             <div className="text-gray-700 leading-relaxed text-sm" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {teamMembers.find(m => m.id === hoveredMember)?.bio}
+              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.bio}
             </div>
           </div>
         </div>,
