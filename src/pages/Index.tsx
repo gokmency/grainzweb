@@ -7,6 +7,7 @@ import { WorkWithUs } from '../components/home/WorkWithUs';
 import { HeroSection } from '../components/home/HeroSection';
 import { ContactPopup } from '../components/home/ContactPopup';
 import { CONFIG } from '@/config/constants';
+import { SchemaOrg } from '@/components/SEO/SchemaOrg';
 
 const Index = () => {
   const [showContactPopup, setShowContactPopup] = useState(false);
@@ -25,6 +26,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#C8102E] to-[#E53E3E] relative flex flex-col overflow-hidden" style={{ fontFamily: "'Tomorrow', sans-serif" }} role="main">
+      <SchemaOrg />
       {/* Waves Animation Background */}
       <div className="absolute inset-0 z-0">
         <Waves
