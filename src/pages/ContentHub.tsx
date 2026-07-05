@@ -13,7 +13,13 @@ const ContentHub = () => {
   const postsQuery = useHashnodePosts({ first: 12, tagSlug: selectedTagSlug });
 
   const allPosts = useMemo(() => {
-    return (postsQuery.data?.pages ?? []).flatMap((p) => p.edges.map((e) => e.node));
+    const posts = (postsQuery.data?.pages ?? []).flatMap((p) => p.edges.map((e) => e.node));
+    return posts.map((post) => ({
+      ...post,
+      _searchTitle: post.title.toLowerCase(),
+      _searchBrief: post.brief.toLowerCase(),
+      _searchTags: post.tags.map((t) => `${t.name.toLowerCase()} ${t.slug.toLowerCase()}`),
+    }));
   }, [postsQuery.data?.pages]);
 
   const availableTags = useMemo(() => {
@@ -34,9 +40,9 @@ const ContentHub = () => {
 
     return allPosts.filter((post) => {
       return (
-        post.title.toLowerCase().includes(q) ||
-        post.brief.toLowerCase().includes(q) ||
-        post.tags.some((t) => t.name.toLowerCase().includes(q) || t.slug.toLowerCase().includes(q))
+        post._searchTitle.includes(q) ||
+        post._searchBrief.includes(q) ||
+        post._searchTags.some((st) => st.includes(q))
       );
     });
   }, [allPosts, searchQuery]);
