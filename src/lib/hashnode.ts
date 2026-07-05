@@ -1,13 +1,13 @@
-export const HASHNODE_ENDPOINT = "https://gql.hashnode.com/graphql";
-// Custom domain host works on Hashnode GraphQL and avoids confusion with www/subdomain.
-// We default to "grainz.hashnode.dev" to ensure we can fetch data even if the custom domain isn't fully propagated on Hashnode's side or during dev.
-// We explicitly ignore "grainz.site" because it is the target host, not the source host, and using it often causes "publication not found" errors.
+import { XMLParser } from 'fast-xml-parser';
+import * as cheerio from 'cheerio';
+import { marked } from 'marked';
+import sanitizeHtml from 'sanitize-html';
+
 const envHost = (import.meta as any).env?.VITE_HASHNODE_HOST;
 
 const cleanHost = (host: string | undefined) => {
   if (!host) return null;
-  // Remove protocol, www, trailing slashes, and whitespace
-  let cleaned = host
+  const cleaned = host
     .replace(/^https?:\/\//, "")
     .replace(/^www\./, "")
     .replace(/\/$/, "")
@@ -56,44 +56,11 @@ export type HashnodePostDetail = HashnodePostListItem & {
   contentHtml: string;
 };
 
-type GraphQLError = { message: string };
-
 export class HashnodeError extends Error {
-  readonly causeErrors?: GraphQLError[];
-  constructor(message: string, errors?: GraphQLError[]) {
+  constructor(message: string) {
     super(message);
     this.name = "HashnodeError";
-    this.causeErrors = errors;
   }
-}
-
-async function fetchGraphQL<TData, TVariables extends Record<string, unknown>>(
-  query: string,
-  variables: TVariables,
-  opts?: { signal?: AbortSignal }
-): Promise<TData> {
-  const res = await fetch(HASHNODE_ENDPOINT, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({ query, variables }),
-    signal: opts?.signal,
-  });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new HashnodeError(`Hashnode API request failed (${res.status}). ${text}`.trim());
-  }
-
-  const json = (await res.json()) as { data?: TData; errors?: GraphQLError[] };
-  if (json.errors?.length) {
-    throw new HashnodeError(json.errors[0]?.message || "Hashnode GraphQL error", json.errors);
-  }
-  if (!json.data) {
-    throw new HashnodeError("Hashnode GraphQL returned no data");
-  }
-  return json.data;
 }
 
 export type HashnodePostsPage = {
@@ -107,106 +74,311 @@ export type HashnodePostsPage = {
   };
 };
 
+let cachedPosts: HashnodePostListItem[] | null = null;
+let lastFetchTime = 0;
+const CACHE_TTL = 1000 * 60; // 1 minute
+
+async function fetchAllPosts(signal?: AbortSignal): Promise<HashnodePostListItem[]> {
+  if (cachedPosts && Date.now() - lastFetchTime < CACHE_TTL) {
+    return cachedPosts;
+  }
+
+  try {
+    let sitemapItems: any[] = [];
+    try {
+        const sitemapRes = await fetchWithTimeout(`https://${HASHNODE_HOST}/sitemap.xml`, { signal }, 5000);
+        if (sitemapRes.ok) {
+            const sitemapXml = await sitemapRes.text();
+            if (sitemapXml.includes("<?xml") || sitemapXml.includes("<urlset")) {
+                const sitemapParser = new XMLParser({ ignoreAttributes: false });
+                const sitemapObj = sitemapParser.parse(sitemapXml);
+                const rawUrls = sitemapObj?.urlset?.url || [];
+                sitemapItems = Array.isArray(rawUrls) ? rawUrls : [rawUrls];
+            }
+        }
+    } catch(e) {
+        console.warn("[Hashnode] Sitemap fetch failed:", e);
+    }
+
+    const res = await fetchWithTimeout(`https://${HASHNODE_HOST}/rss.xml`, { signal }, 5000);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch RSS: ${res.status}`);
+    }
+    const xml = await res.text();
+    const parser = new XMLParser({ ignoreAttributes: false });
+    const jsonObj = parser.parse(xml);
+    const rawItems = jsonObj?.rss?.channel?.item || [];
+    const items = Array.isArray(rawItems) ? rawItems : [rawItems];
+
+    const postsMap = new Map<string, any>();
+
+    sitemapItems.forEach((item: any) => {
+        const loc = item.loc || "";
+        let slug = loc.split('/').pop() || "";
+        if (slug.includes('?')) {
+            slug = slug.split('?')[0];
+        }
+        if (slug) {
+            postsMap.set(slug, {
+                id: slug,
+                title: slug.replace(/-/g, ' '),
+                slug: slug,
+                brief: "",
+                url: loc,
+                publishedAt: new Date().toISOString(),
+                readTimeInMinutes: 1,
+                coverImage: null,
+                tags: [],
+                _rawHtml: ""
+            });
+        }
+    });
+
+    items.forEach((item: any) => {
+      let slug = item.guid || item.link || "";
+      if (typeof slug === "object" && slug["#text"]) {
+          slug = slug["#text"];
+      }
+      slug = slug.split('/').pop() || "";
+      if (slug.includes('?')) {
+        slug = slug.split('?')[0];
+      }
+
+      const publishedAt = item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString();
+      let enclosureUrl = null;
+      if (item.enclosure && item.enclosure["@_url"]) {
+          enclosureUrl = item.enclosure["@_url"];
+      }
+
+      const encodedContent = item["content:encoded"] || "";
+      let brief = item.description || encodedContent || "";
+      brief = brief.replace(/<[^>]*>?/gm, ''); // strip HTML
+      if (brief.length > 200) {
+        brief = brief.substring(0, 200) + '...';
+      }
+
+      const wordCount = encodedContent.split(/\s+/).length;
+      const readTimeInMinutes = Math.max(1, Math.ceil(wordCount / 200));
+
+      if (slug) {
+          postsMap.set(slug, {
+            id: slug,
+            title: item.title || "Untitled",
+            slug: slug,
+            brief: brief,
+            url: item.link || `https://${HASHNODE_HOST}/${slug}`,
+            publishedAt,
+            readTimeInMinutes,
+            coverImage: enclosureUrl ? { url: enclosureUrl } : null,
+            tags: [],
+            _rawHtml: encodedContent,
+          });
+      }
+    });
+
+    const posts = Array.from(postsMap.values());
+    posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+
+    cachedPosts = posts;
+    lastFetchTime = Date.now();
+    return posts;
+
+  } catch (err: any) {
+    console.error("[Hashnode] RSS fetch failed:", err);
+    if (cachedPosts) return cachedPosts;
+    return [];
+  }
+}
+
 export async function listPublicationPosts(args: {
   first: number;
   after?: string | null;
   tagSlug?: string | null;
   signal?: AbortSignal;
 }): Promise<{ posts: HashnodePostsPage }> {
-  const query = `
-    query PublicationPosts($host: String!, $first: Int!, $after: String, $filter: PublicationPostConnectionFilter) {
-      publication(host: $host) {
-        posts(first: $first, after: $after, filter: $filter) {
-          edges {
-            cursor
-            node {
-              id
-              title
-              slug
-              brief
-              url
-              publishedAt
-              readTimeInMinutes
-              coverImage { url }
-              tags { name slug }
-            }
-          }
-          pageInfo { hasNextPage endCursor }
-        }
-      }
-    }
-  `;
 
-  type Resp = {
-    publication: {
-      posts: HashnodePostsPage;
-    } | null;
-  };
+  const allPosts = await fetchAllPosts(args.signal);
 
-  const filter = args.tagSlug ? { tagSlugs: [args.tagSlug] } : null;
-  const data = await fetchGraphQL<Resp, { host: string; first: number; after: string | null; filter: any }>(
-    query,
-    {
-      host: HASHNODE_HOST,
-      first: args.first,
-      after: args.after ?? null,
-      filter,
-    },
-    { signal: args.signal }
-  );
-
-  if (!data.publication) {
-    throw new HashnodeError(`Hashnode publication not found for host: ${HASHNODE_HOST}`);
+  let filtered = allPosts;
+  if (args.tagSlug) {
+    filtered = filtered.filter(p => p.tags.some(t => t.slug === args.tagSlug));
   }
 
-  return { posts: data.publication.posts };
+  let startIndex = 0;
+  if (args.after) {
+    const afterIdx = filtered.findIndex(p => p.slug === args.after);
+    if (afterIdx !== -1) {
+      startIndex = afterIdx + 1;
+    }
+  }
+
+  const endIndex = startIndex + args.first;
+  const sliced = filtered.slice(startIndex, endIndex);
+
+  const edges = sliced.map(p => ({
+    cursor: p.slug,
+    node: p
+  }));
+
+  const hasNextPage = endIndex < filtered.length;
+  const endCursor = hasNextPage && sliced.length > 0 ? sliced[sliced.length - 1].slug : null;
+
+  return {
+    posts: {
+      edges,
+      pageInfo: {
+        hasNextPage,
+        endCursor
+      }
+    }
+  };
 }
+
+const fetchWithTimeout = async (url: string, opts?: RequestInit, ms: number = 5000) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), ms);
+
+    let compositeSignal: AbortSignal;
+    if (opts?.signal && (AbortSignal as any).any) {
+        compositeSignal = (AbortSignal as any).any([opts.signal, controller.signal]);
+    } else if (opts?.signal) {
+        compositeSignal = controller.signal;
+        opts.signal.addEventListener('abort', () => controller.abort());
+    } else {
+        compositeSignal = controller.signal;
+    }
+
+    try {
+        const response = await fetch(url, { ...opts, signal: compositeSignal });
+        clearTimeout(id);
+        return response;
+    } catch(e) {
+        clearTimeout(id);
+        throw e;
+    }
+};
 
 export async function getPublicationPostBySlug(args: {
   slug: string;
   signal?: AbortSignal;
 }): Promise<HashnodePostDetail | null> {
-  const query = `
-    query PublicationPostBySlug($host: String!, $slug: String!) {
-      publication(host: $host) {
-        post(slug: $slug) {
-          id
-          title
-          slug
-          brief
-          url
-          publishedAt
-          readTimeInMinutes
-          coverImage { url }
-          tags { name slug }
-          author { name username profilePicture }
-          content { html }
-        }
+  const allPosts = await fetchAllPosts(args.signal);
+  const post = allPosts.find((p) => p.slug === args.slug) as (HashnodePostListItem & { _rawHtml?: string }) | undefined;
+
+  if (!post) {
+      return null;
+  }
+
+  let rawContent = "";
+  let isMarkdown = false;
+  let found = false;
+
+  // Fallback 1: Try direct .md file from Hashnode
+  if (!found) {
+      try {
+          const res = await fetchWithTimeout(`https://${HASHNODE_HOST}/${args.slug}.md`, { signal: args.signal }, 3000);
+          if (res.ok) {
+              const text = await res.text();
+              if (!text.includes("<!DOCTYPE html>")) {
+                  rawContent = text;
+                  isMarkdown = true;
+                  found = true;
+              }
+          }
+      } catch (e) {
+          console.warn("Markdown endpoint fallback failed:", e);
       }
-    }
-  `;
+  }
 
-  type Resp = {
-    publication: {
-      post: (HashnodePostListItem & {
-        author: HashnodeUser;
-        content: { html: string };
-      }) | null;
-    } | null;
-  };
+  // Fallback 2: Try Accept: text/markdown on canonical URL
+  if (!found) {
+      try {
+          const res = await fetchWithTimeout(`https://${HASHNODE_HOST}/${args.slug}`, {
+              headers: { "Accept": "text/markdown" },
+              signal: args.signal
+          }, 3000);
+          if (res.ok) {
+              const contentType = res.headers.get("content-type");
+              if (contentType && contentType.includes("markdown")) {
+                  const text = await res.text();
+                  if (!text.includes("<!DOCTYPE html>")) {
+                      rawContent = text;
+                      isMarkdown = true;
+                      found = true;
+                  }
+              }
+          }
+      } catch(e) {
+          console.warn("Markdown accept header fallback failed:", e);
+      }
+  }
 
-  const data = await fetchGraphQL<Resp, { host: string; slug: string }>(
-    query,
-    { host: HASHNODE_HOST, slug: args.slug },
-    { signal: args.signal }
-  );
+  // Fallback 3: Use RSS content:encoded (already stored in _rawHtml)
+  if (!found && post._rawHtml) {
+      rawContent = post._rawHtml;
+      isMarkdown = false;
+      found = true;
+  }
 
-  const post = data.publication?.post ?? null;
-  if (!post) return null;
+  // Fallback 4: Canonical HTML extraction
+  if (!found) {
+      try {
+          const res = await fetchWithTimeout(`https://${HASHNODE_HOST}/${args.slug}`, { signal: args.signal }, 3000);
+          if (res.ok) {
+              const html = await res.text();
+              if (!html.includes('id="challenge-error-text"')) { // Ensure it's not a Cloudflare challenge
+                  const $ = cheerio.load(html);
+                  const articleContent = $('article, #post-content-wrapper, .prose').html();
+                  if (articleContent) {
+                      rawContent = articleContent;
+                      isMarkdown = false;
+                      found = true;
+                  }
+              }
+          }
+      } catch(e) {
+          console.warn("HTML extraction fallback failed:", e);
+      }
+  }
+
+  // If everything failed, just use brief
+  if (!found) {
+      rawContent = `<p>${post.brief}</p>`;
+      isMarkdown = false;
+  }
+
+  let contentHtml = "";
+  if (isMarkdown) {
+      contentHtml = await marked.parse(rawContent, { async: true });
+  } else {
+      contentHtml = rawContent;
+  }
+
+  contentHtml = sanitizeHtml(contentHtml, {
+      allowedTags: [
+          'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+          'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+          'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img', 'span', 'figure', 'figcaption'
+      ],
+      allowedAttributes: {
+          'a': ['href', 'name', 'target', 'rel'],
+          'img': ['src', 'alt', 'title'],
+          'code': ['class'],
+          'pre': ['class'],
+          'span': ['class']
+      },
+      transformTags: {
+          'a': sanitizeHtml.simpleTransform('a', { target: '_blank', rel: 'noopener noreferrer' })
+      }
+  });
 
   return {
-    ...post,
-    contentHtml: post.content.html,
+      ...post,
+      author: {
+          name: "Grainz Team",
+          username: "grainz",
+          profilePicture: null
+      },
+      contentHtml
   };
 }
-
