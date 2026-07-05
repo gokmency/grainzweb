@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { TEAM_MEMBERS } from "../config/constants";
 
@@ -61,18 +61,20 @@ const TeamPhotos: React.FC = () => {
   };
 
 
-  const handleTwitterClick = (memberId: number) => {
-    const member = TEAM_MEMBERS.find(m => m.id === memberId);
-    if (member?.twitter) {
-      window.open(member.twitter, '_blank');
+  const activeMember = useMemo(() =>
+    hoveredMember !== null ? TEAM_MEMBERS.find(m => m.id === hoveredMember) : null
+  , [hoveredMember]);
+
+  const handleTwitterClick = () => {
+    if (activeMember?.twitter) {
+      window.open(activeMember.twitter, '_blank');
     }
     setHoveredMember(null);
   };
 
-  const handleLinkedInClick = (memberId: number) => {
-    const member = TEAM_MEMBERS.find(m => m.id === memberId);
-    if (member?.linkedin) {
-      window.open(member.linkedin, '_blank');
+  const handleLinkedInClick = () => {
+    if (activeMember?.linkedin) {
+      window.open(activeMember.linkedin, '_blank');
     }
     setHoveredMember(null);
   };
@@ -218,9 +220,9 @@ const TeamPhotos: React.FC = () => {
             {/* Social Media buttons */}
             <div className="absolute right-3 top-3 flex gap-2">
               {/* LinkedIn button */}
-              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.linkedin && (
+              {activeMember?.linkedin && (
                 <button
-                  onClick={() => handleLinkedInClick(hoveredMember)}
+                  onClick={handleLinkedInClick}
                   className="w-6 h-6 text-gray-400 hover:text-blue-700 transition-colors z-10 flex items-center justify-center rounded-full hover:bg-gray-100"
                   aria-label="Visit LinkedIn profile"
                 >
@@ -232,7 +234,7 @@ const TeamPhotos: React.FC = () => {
               
               {/* Twitter button */}
               <button
-                onClick={() => handleTwitterClick(hoveredMember)}
+                onClick={handleTwitterClick}
                 className="w-6 h-6 text-gray-400 hover:text-blue-500 transition-colors z-10 flex items-center justify-center rounded-full hover:bg-gray-100"
                 aria-label="Visit X.com profile"
               >
@@ -244,17 +246,17 @@ const TeamPhotos: React.FC = () => {
 
             {/* Name */}
             <div className="font-bold text-xl mb-1 text-gray-900" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.name}
+              {activeMember?.name}
             </div>
             
             {/* Role */}
             <div className="font-semibold text-[#C8102E] mb-4 text-sm uppercase tracking-wide" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.role}
+              {activeMember?.role}
             </div>
             
             {/* Bio */}
             <div className="text-gray-700 leading-relaxed text-sm" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.bio}
+              {activeMember?.bio}
             </div>
           </div>
         </div>,
