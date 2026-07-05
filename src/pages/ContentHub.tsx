@@ -5,6 +5,15 @@ import { Waves } from '@/components/ui/waves-background';
 import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card-effect';
 import { useHashnodePosts } from '@/hooks/useHashnodePosts';
 import SEO from '@/components/SEO';
+import { HashnodePostListItem } from '@/lib/hashnode';
+
+interface OptimizedPost extends HashnodePostListItem {
+  _searchContent: {
+    title: string;
+    brief: string;
+    tags: string[];
+  };
+}
 
 const ContentHub = () => {
   const [selectedTagSlug, setSelectedTagSlug] = useState<string | null>(null);
@@ -12,8 +21,18 @@ const ContentHub = () => {
 
   const postsQuery = useHashnodePosts({ first: 12, tagSlug: selectedTagSlug });
 
-  const allPosts = useMemo(() => {
-    return (postsQuery.data?.pages ?? []).flatMap((p) => p.edges.map((e) => e.node));
+  const allPosts = useMemo<OptimizedPost[]>(() => {
+    return (postsQuery.data?.pages ?? []).flatMap((p) => p.edges.map((e) => {
+      const node = e.node;
+      return {
+        ...node,
+        _searchContent: {
+          title: node.title.toLowerCase(),
+          brief: node.brief.toLowerCase(),
+          tags: node.tags.flatMap(t => [t.name.toLowerCase(), t.slug.toLowerCase()])
+        }
+      };
+    }));
   }, [postsQuery.data?.pages]);
 
   const availableTags = useMemo(() => {
@@ -33,10 +52,11 @@ const ContentHub = () => {
     if (!q) return allPosts;
 
     return allPosts.filter((post) => {
+      const search = post._searchContent;
       return (
-        post.title.toLowerCase().includes(q) ||
-        post.brief.toLowerCase().includes(q) ||
-        post.tags.some((t) => t.name.toLowerCase().includes(q) || t.slug.toLowerCase().includes(q))
+        search.title.includes(q) ||
+        search.brief.includes(q) ||
+        search.tags.some(tag => tag.includes(q))
       );
     });
   }, [allPosts, searchQuery]);
