@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { TEAM_MEMBERS } from "../config/constants";
 
@@ -6,6 +6,11 @@ const TeamPhotos: React.FC = () => {
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const hoveredMemberData = useMemo(() => {
+    if (hoveredMember === null) return null;
+    return TEAM_MEMBERS.find(m => m.id === hoveredMember) || null;
+  }, [hoveredMember]);
 
   const handleMouseEnter = (memberId: number, event: React.MouseEvent | React.TouchEvent) => {
     if (leaveTimeoutRef.current) {
@@ -61,18 +66,16 @@ const TeamPhotos: React.FC = () => {
   };
 
 
-  const handleTwitterClick = (memberId: number) => {
-    const member = TEAM_MEMBERS.find(m => m.id === memberId);
-    if (member?.twitter) {
-      window.open(member.twitter, '_blank');
+  const handleTwitterClick = () => {
+    if (hoveredMemberData?.twitter) {
+      window.open(hoveredMemberData.twitter, '_blank');
     }
     setHoveredMember(null);
   };
 
-  const handleLinkedInClick = (memberId: number) => {
-    const member = TEAM_MEMBERS.find(m => m.id === memberId);
-    if (member?.linkedin) {
-      window.open(member.linkedin, '_blank');
+  const handleLinkedInClick = () => {
+    if (hoveredMemberData?.linkedin) {
+      window.open(hoveredMemberData.linkedin, '_blank');
     }
     setHoveredMember(null);
   };
@@ -218,9 +221,9 @@ const TeamPhotos: React.FC = () => {
             {/* Social Media buttons */}
             <div className="absolute right-3 top-3 flex gap-2">
               {/* LinkedIn button */}
-              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.linkedin && (
+              {hoveredMemberData?.linkedin && (
                 <button
-                  onClick={() => handleLinkedInClick(hoveredMember)}
+                  onClick={handleLinkedInClick}
                   className="w-6 h-6 text-gray-400 hover:text-blue-700 transition-colors z-10 flex items-center justify-center rounded-full hover:bg-gray-100"
                   aria-label="Visit LinkedIn profile"
                 >
@@ -232,7 +235,7 @@ const TeamPhotos: React.FC = () => {
               
               {/* Twitter button */}
               <button
-                onClick={() => handleTwitterClick(hoveredMember)}
+                onClick={handleTwitterClick}
                 className="w-6 h-6 text-gray-400 hover:text-blue-500 transition-colors z-10 flex items-center justify-center rounded-full hover:bg-gray-100"
                 aria-label="Visit X.com profile"
               >
@@ -244,17 +247,17 @@ const TeamPhotos: React.FC = () => {
 
             {/* Name */}
             <div className="font-bold text-xl mb-1 text-gray-900" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.name}
+              {hoveredMemberData?.name}
             </div>
             
             {/* Role */}
             <div className="font-semibold text-[#C8102E] mb-4 text-sm uppercase tracking-wide" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.role}
+              {hoveredMemberData?.role}
             </div>
             
             {/* Bio */}
             <div className="text-gray-700 leading-relaxed text-sm" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {TEAM_MEMBERS.find(m => m.id === hoveredMember)?.bio}
+              {hoveredMemberData?.bio}
             </div>
           </div>
         </div>,
