@@ -12,33 +12,47 @@ const ContentHub = () => {
 
   const postsQuery = useHashnodePosts({ first: 12, tagSlug: selectedTagSlug });
 
-  const allPosts = useMemo(() => {
-    return (postsQuery.data?.pages ?? []).flatMap((p) => p.edges.map((e) => e.node));
-  }, [postsQuery.data?.pages]);
-
-  const availableTags = useMemo(() => {
+  const { allPosts, availableTags } = useMemo(() => {
+    const posts: any[] = [];
     const seen = new Map<string, { slug: string; name: string; count: number }>();
-    for (const post of allPosts) {
-      for (const tag of post.tags) {
-        const existing = seen.get(tag.slug);
-        if (existing) existing.count += 1;
-        else seen.set(tag.slug, { slug: tag.slug, name: tag.name, count: 1 });
+    const pages = postsQuery.data?.pages ?? [];
+
+    for (let i = 0; i < pages.length; i++) {
+      const edges = pages[i].edges;
+      for (let j = 0; j < edges.length; j++) {
+        const post = edges[j].node;
+
+        // Pre-calculate search content: title + brief + tag names/slugs
+        let tagsSearch = "";
+        const tags = post.tags;
+        for (let k = 0; k < tags.length; k++) {
+          const tag = tags[k];
+          tagsSearch += `${tag.name} ${tag.slug} `;
+          const existing = seen.get(tag.slug);
+          if (existing) {
+            existing.count += 1;
+          } else {
+            seen.set(tag.slug, { slug: tag.slug, name: tag.name, count: 1 });
+          }
+        }
+
+        const searchContent = `${post.title} ${post.brief} ${tagsSearch}`.toLowerCase();
+        posts.push({ ...post, _searchContent: searchContent });
       }
     }
-    return Array.from(seen.values()).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
-  }, [allPosts]);
+
+    const tags = Array.from(seen.values()).sort(
+      (a, b) => b.count - a.count || a.name.localeCompare(b.name)
+    );
+
+    return { allPosts: posts, availableTags: tags };
+  }, [postsQuery.data?.pages]);
 
   const filteredPosts = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return allPosts;
 
-    return allPosts.filter((post) => {
-      return (
-        post.title.toLowerCase().includes(q) ||
-        post.brief.toLowerCase().includes(q) ||
-        post.tags.some((t) => t.name.toLowerCase().includes(q) || t.slug.toLowerCase().includes(q))
-      );
-    });
+    return allPosts.filter((post) => post._searchContent.includes(q));
   }, [allPosts, searchQuery]);
 
   return (
