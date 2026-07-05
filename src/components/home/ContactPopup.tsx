@@ -29,15 +29,15 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
     try {
       const emailAddresses = CONFIG.emails.contact;
 
-      const promises = emailAddresses.map(async (email) => {
-        const formData = new FormData();
-        formData.append('name', contactForm.name);
-        formData.append('email', contactForm.email);
-        formData.append('message', contactForm.message);
-        formData.append('_subject', `Contact from ${contactForm.name} - GRAINZ Website`);
-        formData.append('_captcha', 'false');
-        formData.append('_template', 'table');
+      const formData = new FormData();
+      formData.append('name', contactForm.name);
+      formData.append('email', contactForm.email);
+      formData.append('message', contactForm.message);
+      formData.append('_subject', `Contact from ${contactForm.name} - GRAINZ Website`);
+      formData.append('_captcha', 'false');
+      formData.append('_template', 'table');
 
+      const promises = emailAddresses.map((email) => {
         return fetch(`${CONFIG.emails.formSubmitEndpoint}${email}`, {
           method: 'POST',
           body: formData
