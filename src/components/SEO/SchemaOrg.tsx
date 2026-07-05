@@ -5,6 +5,45 @@ import { SEO_RICH_DATA } from '@/config/seo_rich_data';
 export const SchemaOrg: React.FC = () => {
   const { organization, people } = SEO_RICH_DATA;
 
+  // Pre-process people to avoid redundant string manipulations and multiple array traversals
+  const { personSchemas, founders, employees } = React.useMemo(() => {
+    const foundersRefs: { "@id": string }[] = [];
+    const employeesRefs: { "@id": string }[] = [];
+
+    const schemas = people.map(person => {
+      const personId = `${organization.url}/#person-${person.name.toLowerCase().replace(/\s+/g, '-')}`;
+      const personRef = { "@id": personId };
+
+      employeesRefs.push(personRef);
+      if (person.jobTitle.toLowerCase().includes('founder')) {
+        foundersRefs.push(personRef);
+      }
+
+      return {
+        "@type": "Person",
+        "@id": personId,
+        "name": person.name,
+        "jobTitle": person.jobTitle,
+        "worksFor": { "@id": `${organization.url}/#organization` },
+        "url": person.url,
+        "image": {
+          "@type": "ImageObject",
+          "url": person.image,
+          "caption": `${person.name} - ${person.jobTitle}`
+        },
+        "description": person.description,
+        "sameAs": person.sameAs,
+        "knowsAbout": person.knowsAbout
+      };
+    });
+
+    return {
+      personSchemas: schemas,
+      founders: foundersRefs,
+      employees: employeesRefs
+    };
+  }, [people, organization.url]);
+
   // Construct the graph
   const graph = [
     // Organization Schema
@@ -26,10 +65,8 @@ export const SchemaOrg: React.FC = () => {
       "address": organization.address,
       "sameAs": organization.sameAs,
       // Link founders and employees
-      "founder": people
-        .filter(p => p.jobTitle.toLowerCase().includes('founder'))
-        .map(p => ({ "@id": `${organization.url}/#person-${p.name.toLowerCase().replace(/\s+/g, '-')}` })),
-      "employee": people.map(p => ({ "@id": `${organization.url}/#person-${p.name.toLowerCase().replace(/\s+/g, '-')}` })),
+      "founder": founders,
+      "employee": employees,
       "brand": { "@id": `${organization.url}/#brand` }
     },
     // Brand Schema
@@ -61,22 +98,7 @@ export const SchemaOrg: React.FC = () => {
       "inLanguage": "en-US"
     },
     // Person Schemas
-    ...people.map(person => ({
-      "@type": "Person",
-      "@id": `${organization.url}/#person-${person.name.toLowerCase().replace(/\s+/g, '-')}`,
-      "name": person.name,
-      "jobTitle": person.jobTitle,
-      "worksFor": { "@id": `${organization.url}/#organization` },
-      "url": person.url,
-      "image": {
-        "@type": "ImageObject",
-        "url": person.image,
-        "caption": `${person.name} - ${person.jobTitle}`
-      },
-      "description": person.description,
-      "sameAs": person.sameAs,
-      "knowsAbout": person.knowsAbout
-    }))
+    ...personSchemas
   ];
 
   const schemaData = {
