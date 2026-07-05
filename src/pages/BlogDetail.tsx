@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, Share2 } from 'lucide-react';
 import { Waves } from '@/components/ui/waves-background';
@@ -14,10 +14,20 @@ const BlogDetail = () => {
 
   const firstTagSlug = blogPost?.tags?.[0]?.slug ?? null;
   const relatedQuery = useHashnodePosts({ first: 12, tagSlug: firstTagSlug });
-  const relatedPosts = (relatedQuery.data?.pages ?? [])
-    .flatMap((p) => p.edges.map((e) => e.node))
-    .filter((p) => p.slug !== blogPost?.slug)
-    .slice(0, 6);
+
+  const relatedPosts = useMemo(() => {
+    const pages = relatedQuery.data?.pages ?? [];
+    const results = [];
+    for (const page of pages) {
+      for (const edge of page.edges) {
+        if (edge.node.slug !== blogPost?.slug) {
+          results.push(edge.node);
+          if (results.length >= 6) return results;
+        }
+      }
+    }
+    return results;
+  }, [relatedQuery.data?.pages, blogPost?.slug]);
 
   if (postQuery.isLoading) {
     return (
