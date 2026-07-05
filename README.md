@@ -74,4 +74,4 @@ The project is configured for easy deployment on Vercel. Simply push to your rep
 
 ## License
 
-All rights reserved © 2026 GRAINZ STUDIO
+All rights reserved © 2026 GRAINZ STUDIO . 
