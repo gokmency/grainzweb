@@ -5,6 +5,20 @@ import { SEO_RICH_DATA } from '@/config/seo_rich_data';
 export const SchemaOrg: React.FC = () => {
   const { organization, people } = SEO_RICH_DATA;
 
+  // Pre-process people to avoid multiple iterations and redundant string operations
+  const peopleGroup = people.reduce(
+    (acc, p) => {
+      const personId = `${organization.url}/#person-${p.name.toLowerCase().replace(/\s+/g, '-')}`;
+      const personRef = { "@id": personId };
+      acc.employee.push(personRef);
+      if (p.jobTitle.toLowerCase().includes('founder')) {
+        acc.founder.push(personRef);
+      }
+      return acc;
+    },
+    { founder: [] as { "@id": string }[], employee: [] as { "@id": string }[] }
+  );
+
   // Construct the graph
   const graph = [
     // Organization Schema
@@ -26,10 +40,8 @@ export const SchemaOrg: React.FC = () => {
       "address": organization.address,
       "sameAs": organization.sameAs,
       // Link founders and employees
-      "founder": people
-        .filter(p => p.jobTitle.toLowerCase().includes('founder'))
-        .map(p => ({ "@id": `${organization.url}/#person-${p.name.toLowerCase().replace(/\s+/g, '-')}` })),
-      "employee": people.map(p => ({ "@id": `${organization.url}/#person-${p.name.toLowerCase().replace(/\s+/g, '-')}` })),
+      "founder": peopleGroup.founder,
+      "employee": peopleGroup.employee,
       "brand": { "@id": `${organization.url}/#brand` }
     },
     // Brand Schema
