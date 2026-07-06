@@ -76,7 +76,7 @@ He writes code, but somehow ends up building ideas too.`,
     bio: "With an industrial design background, Burak leads modeling and interface design processes, and has recently been exploring yacht design. Sketches ideas first, then brings them to life.",
     twitter: "https://x.com/100guc",
     linkedin: "https://www.linkedin.com/in/burakyuzguc",
-    website: "https://yuzguc.vercel.app"
+    website: "https://burakyuzguc.vercel.app"
   },
   {
     id: 2,
