@@ -8,8 +8,10 @@ import { HeroSection } from '../components/home/HeroSection';
 import { ContactPopup } from '../components/home/ContactPopup';
 import { CONFIG } from '@/config/constants';
 import { SchemaOrg } from '@/components/SEO/SchemaOrg';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Index = () => {
+  const lang = useLanguage();
   const [showContactPopup, setShowContactPopup] = useState(false);
 
   const handleFollowUsClick = () => {
@@ -18,10 +20,6 @@ const Index = () => {
 
   const handleContactUsClick = () => {
     setShowContactPopup(true);
-  };
-
-  const handleGrainzClick = () => {
-    window.open(CONFIG.socials.twitter, '_blank');
   };
 
   return (
@@ -82,7 +80,7 @@ const Index = () => {
                   className="text-sm md:text-lg font-bold text-white mb-2 md:mb-4 text-center md:text-left"
                   style={{ letterSpacing: '2px', fontFamily: "'Tomorrow', sans-serif" }}
                 >
-                  {CONFIG.text.whoWeAre.title}
+                  {CONFIG.text.whoWeAre.title[lang]}
                 </h2>
                 <div className="flex justify-center md:block">
                   <TeamPhotos />
@@ -103,15 +101,7 @@ const Index = () => {
             textShadow: "0 2px 8px rgba(44,0,0,0.18)",
             fontFamily: "'Tomorrow', sans-serif"
           }}>
-            © 2026{' '}
-            <button 
-              onClick={handleGrainzClick}
-              className="underline hover:text-white transition-colors cursor-pointer"
-              aria-label="Visit Grainz X (Twitter) profile"
-            >
-              GRAINZ
-            </button>
-            {' '}All rights reserved.
+            {CONFIG.text.copyright[lang]}
           </p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CONFIG } from '@/config/constants';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface ContactPopupProps {
   isOpen: boolean;
@@ -7,6 +8,7 @@ interface ContactPopupProps {
 }
 
 export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) => {
+  const lang = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [contactForm, setContactForm] = useState({
@@ -60,7 +62,7 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
     } catch (error) {
       console.error('Form submission error:', error);
       setIsSubmitting(false);
-      alert('Mesaj gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
+      alert(CONFIG.text.contactPopup.error[lang]);
     }
   };
 
@@ -91,12 +93,12 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
         {/* Header */}
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-2" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-            {submitSuccess ? 'Message Sent!' : 'Contact With Us'}
+            {submitSuccess ? CONFIG.text.contactPopup.successTitle[lang] : CONFIG.text.contactPopup.title[lang]}
           </h2>
           <p className="text-gray-600 text-sm" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
             {submitSuccess
-              ? 'Your message has been sent successfully! We\'ll get back to you soon.'
-              : 'Send us a message and we\'ll get back to you soon.'
+              ? CONFIG.text.contactPopup.successDescription[lang]
+              : CONFIG.text.contactPopup.description[lang]
             }
           </p>
         </div>
@@ -117,7 +119,7 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
           <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              Name
+              {CONFIG.text.contactPopup.name[lang]}
             </label>
             <input
               type="text"
@@ -133,7 +135,7 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              Email
+              {CONFIG.text.contactPopup.email[lang]}
             </label>
             <input
               type="email"
@@ -149,7 +151,7 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
 
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              Message
+              {CONFIG.text.contactPopup.message[lang]}
             </label>
             <textarea
               id="message"
@@ -173,7 +175,7 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
                 }`}
                 style={{ fontFamily: "'Tomorrow', sans-serif" }}
               >
-                Cancel
+                {CONFIG.text.contactPopup.cancel[lang]}
               </button>
               <button
                 type="submit"
@@ -189,10 +191,10 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Sending...
+                    {CONFIG.text.contactPopup.sending[lang]}
                   </div>
                 ) : (
-                  'Send Message'
+                  CONFIG.text.contactPopup.send[lang]
                 )}
               </button>
             </div>
@@ -207,7 +209,7 @@ export const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, onClose }) =
               className="px-6 py-2 bg-[#C8102E] text-white rounded-md hover:bg-[#A00E26] transition-colors font-medium"
               style={{ fontFamily: "'Tomorrow', sans-serif" }}
             >
-              Close
+              {CONFIG.text.contactPopup.close[lang]}
             </button>
           </div>
         )}

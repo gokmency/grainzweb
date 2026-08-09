@@ -13,22 +13,73 @@ export const CONFIG = {
     joinTeamTypeform: 'https://form.typeform.com/to/wWliUJsu',
   },
   text: {
-    heroTitle: 'WE BUILD THINGS',
+    heroTitle: {
+      en: 'WE BUILD THINGS',
+      tr: 'BİZ ÜRETİRİZ'
+    },
     whatWeDo: {
-      title: 'WHAT WE DO',
-      description: 'We design, develop, and build innovative solutions while nurturing and managing vibrant communities that drive meaningful engagement and growth.',
-      mobileDescription: 'We design, develop, and build innovative solutions while nurturing communities.',
+      title: {
+        en: 'WHAT WE DO',
+        tr: 'NE YAPIYORUZ'
+      },
+      description: {
+        en: 'We design, develop, and build innovative solutions while nurturing and managing vibrant communities that drive meaningful engagement and growth.',
+        tr: 'Yenilikçi çözümler tasarlıyor, geliştiriyor ve inşa ediyoruz. Aynı zamanda anlamlı etkileşim ve büyüme sağlayan canlı toplulukları besliyor ve yönetiyoruz.'
+      },
+      mobileDescription: {
+        en: 'We design, develop, and build innovative solutions while nurturing communities.',
+        tr: 'Toplulukları beslerken yenilikçi çözümler tasarlıyor, geliştiriyor ve inşa ediyoruz.'
+      },
     },
     workWithUs: {
-      title: 'WORK WITH US',
+      title: {
+        en: 'WORK WITH US',
+        tr: 'BİZİMLE ÇALIŞIN'
+      },
     },
     whoWeAre: {
-      title: 'WHO WE ARE',
+      title: {
+        en: 'WHO WE ARE',
+        tr: 'BİZ KİMİZ'
+      },
     },
     workedWith: {
-      title: 'WORKED WITH',
+      title: {
+        en: 'WORKED WITH',
+        tr: 'BİRLİKTE ÇALIŞTIKLARIMIZ'
+      },
     },
-    copyright: '© 2026 GRAINZ All rights reserved.',
+        buttons: {
+      followUs: { en: 'FOLLOW US', tr: 'TAKİP EDİN' },
+      contactUs: { en: 'CONTACT WITH US', tr: 'İLETİŞİME GEÇİN' },
+      design: { en: 'Design', tr: 'Tasarım' },
+      development: { en: 'Development', tr: 'Yazılım' },
+      community: { en: 'Community', tr: 'Topluluk' },
+      joinTeam: { en: 'Join our team', tr: 'Ekibimize katılın' },
+    },
+    toasts: {
+      designComingSoon: { en: 'Design page coming soon!', tr: 'Tasarım sayfası çok yakında!' },
+      developmentComingSoon: { en: 'Development page coming soon!', tr: 'Yazılım sayfası çok yakında!' },
+      workingHard: { en: 'We are working hard to bring this page to life.', tr: 'Bu sayfayı hayata geçirmek için yoğun çalışıyoruz.' },
+    },
+    contactPopup: {
+      title: { en: 'Contact With Us', tr: 'Bizimle İletişime Geçin' },
+      description: { en: "Send us a message and we'll get back to you soon.", tr: 'Bize bir mesaj gönderin, en kısa sürede size dönüş yapacağız.' },
+      successTitle: { en: 'Message Sent!', tr: 'Mesaj Gönderildi!' },
+      successDescription: { en: "Your message has been sent successfully! We'll get back to you soon.", tr: 'Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.' },
+      name: { en: 'Name', tr: 'İsim' },
+      email: { en: 'Email', tr: 'E-posta' },
+      message: { en: 'Message', tr: 'Mesaj' },
+      cancel: { en: 'Cancel', tr: 'İptal' },
+      send: { en: 'Send Message', tr: 'Mesaj Gönder' },
+      sending: { en: 'Sending...', tr: 'Gönderiliyor...' },
+      close: { en: 'Close', tr: 'Kapat' },
+      error: { en: 'An error occurred while sending the message. Please try again later.', tr: 'Mesaj gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.' }
+    },
+    copyright: {
+      en: '© 2026 GRAINZ All rights reserved.',
+      tr: '© 2026 GRAINZ Tüm hakları saklıdır.'
+    },
   },
 };
 
@@ -38,8 +89,10 @@ export const TEAM_MEMBERS = [
     name: "Gökmen",
     role: "Developer",
     photo: "/team/gokmen.jpg",
-    bio: `Gökmen previously worked on the community side of Web3 projects; these days, he’s a “vibe coder” constantly building new things. He’s also on his way to becoming a computer engineer.
-He writes code, but somehow ends up building ideas too.`,
+    bio: {
+      en: "After working as a community developer in crypto and blockchain projects, he now continues his path as a computer engineer. Not only does he turn his own ideas into products, but he also offers professional development services to clients.",
+      tr: "Kripto ve blockchain projelerinde topluluk geliştiricisi olarak çalıştıktan sonra, artık bilgisayar mühendisi olarak yoluna devam ediyor. Kendi fikirlerini ürüne dönüştürmekle kalmıyor, dışarıya da profesyonel geliştirme hizmeti sunuyor."
+    },
     twitter: "https://x.com/gokmeneth",
     linkedin: "https://www.linkedin.com/in/gokmencelik/",
     website: "https://gokmens.com"
@@ -49,7 +102,10 @@ He writes code, but somehow ends up building ideas too.`,
     name: "Sefercan",
     role: "Researcher",
     photo: "/team/sefercan.jpg",
-    bio: "Sefercan primarily studies medicine, but contributes here by exploring emerging technologies and shaping project strategies. Balances med school by day and future tech by night.",
+    bio: {
+      en: "While studying medicine, he also supports and consults on development processes for the team's projects and sectoral ventures. Don't let his medical background fool you—his tech knowledge and vision easily outpace most \"tech-focused\" folks.",
+      tr: "Bir yandan tıp okuyor, diğer yandan ekibin projelerinde ve sektörel girişimlerinde geliştirme süreçlerine destek olup danışmanlık veriyor. Asıl mesleğinin tıp olmasına bakmayın, teknoloji bilgisi ve vizyonuyla çoğu \"teknoloji odaklı\" insanı cebinden çıkarır."
+    },
     twitter: "https://x.com/sefercan"
   },
   {
@@ -57,7 +113,10 @@ He writes code, but somehow ends up building ideas too.`,
     name: "Ercan",
     role: "Researcher",
     photo: "/team/ercan.jpg",
-    bio: "Ercan is mainly focused on medical school, while supporting the team with research on technological trends and experimental approaches. Studies anatomy but somehow keeps building roadmaps.",
+    bio: {
+      en: "While pursuing his medical education, he plays an active role in the team's tech-focused work and sectoral initiatives, lending a hand in shaping processes through his research.",
+      tr: "Tıp eğitimini sürdürürken, ekibin teknoloji odaklı çalışmalarında ve sektörel girişimlerinde aktif rol alıyor. Araştırmalarıyla süreçlerin şekillenmesine omuz veriyor."
+    },
     twitter: "https://x.com/ercan"
   },
   {
@@ -65,7 +124,10 @@ He writes code, but somehow ends up building ideas too.`,
     name: "Maslak",
     role: "Analyst",
     photo: "/team/maslak.jpg",
-    bio: "Maslak analyzes business processes and develops models to improve operational efficiency, building on his industrial engineering background. Speaks fluent Excel and turns chaos into clean tables.",
+    bio: {
+      en: "Approaching business processes with an industrial engineering background, he designs all operations and workflows systematically by the book, aiming for maximum efficiency.",
+      tr: "İş süreçlerini endüstri mühendisliği altyapısıyla ele alıyor; tüm operasyonları ve akışları tamamen kitabına uygun, sistemli bir şekilde kurgulayarak maksimum verimliliği hedefliyor."
+    },
     twitter: "https://x.com/maslak"
   },
   {
@@ -73,7 +135,10 @@ He writes code, but somehow ends up building ideas too.`,
     name: "Burak",
     role: "Designer",
     photo: "/team/burak.jpg",
-    bio: "With an industrial design background, Burak leads modeling and interface design processes, and has recently been exploring yacht design. Sketches ideas first, then brings them to life.",
+    bio: {
+      en: "Leading modeling and interface processes with an industrial design background, he is a master at turning the product in your mind into a tangible prototype or manufacturing it from scratch in no time.",
+      tr: "Endüstriyel tasarım altyapısıyla modelleme ve arayüz süreçlerine liderlik ediyor. Aklınızdaki ürünü en kısa sürede elle tutulur bir prototipe dönüştürme veya sıfırdan üretme konusunda usta."
+    },
     twitter: "https://x.com/100guc",
     linkedin: "https://www.linkedin.com/in/burakyuzguc",
     website: "https://burakyuzguc.vercel.app"
@@ -83,7 +148,10 @@ He writes code, but somehow ends up building ideas too.`,
     name: "Akman",
     role: "Researcher",
     photo: "/team/berkay.jpg",
-    bio: "Akman mainly focuses on medical school, while supporting the team with research on emerging trends and innovative strategies. Studies medicine full-time, predicts the future part-time.",
+    bio: {
+      en: "Despite being an intern doctor, he makes time to work with the team amidst his hectic schedule. By researching tech trends and actively supporting development processes for ventures, he remains one of the hidden powerhouses behind the projects.",
+      tr: "Stajyer doktor olmasına rağmen yoğun temposunun içinde ekiple birlikte çalışmaya vakit ayırıyor. Teknoloji trendlerini araştırarak ve girişimlerin geliştirme süreçlerine aktif destek vererek projelerin arkasındaki gizli güçlerden biri oluyor."
+    },
     twitter: "https://x.com/Akmangrainz"
   },
   {
@@ -91,7 +159,10 @@ He writes code, but somehow ends up building ideas too.`,
     name: "Ceyhun",
     role: "Intern",
     photo: "/team/ceyhun.jpg",
-    bio: "Doesn’t know much yet, but learning fast.",
+    bio: {
+      en: "The face of the team who handles initial client communications and boasts the highest sales potential. He might be new to the crew, but his persuasion skills already position him to achieve big things.",
+      tr: "Müşterilerle ilk iletişimi kuran, takımın yüzü ve satış potansiyeli en yüksek ismi. Ekibe yeni katılmış olabilir ama ikna kabiliyetiyle şimdiden büyük işler başarmaya aday."
+    },
     twitter: "https://x.com/grainzeth"
   },
 ];

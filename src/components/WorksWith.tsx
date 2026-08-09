@@ -1,5 +1,6 @@
 import { Marquee } from "@/components/ui/marquee"
 import { CONFIG } from "@/config/constants";
+import { useLanguage } from "@/hooks/useLanguage";
 
 // Brand logos - loaded from /public/brands/ directory
 const BrandLogos = {
@@ -57,6 +58,7 @@ const BrandLogos = {
 };
 
 export function WorksWith() {
+  const lang = useLanguage();
   const partners = [
     BrandLogos.sandbox, 
     BrandLogos.aavegotchi, 
@@ -69,7 +71,7 @@ export function WorksWith() {
         className="text-sm md:text-lg font-bold text-white mb-3 md:mb-4 text-center md:text-left"
         style={{ letterSpacing: '2px', fontFamily: "'Tomorrow', sans-serif" }}
       >
-        {CONFIG.text.workedWith.title}
+        {CONFIG.text.workedWith.title[lang]}
       </h2>
 
       {/* Desktop Marquee */}
