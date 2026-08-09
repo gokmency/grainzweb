@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Home, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { CONFIG } from '@/config/constants';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const NotFound = () => {
+  const lang = useLanguage();
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#C8102E] to-[#E53E3E] flex items-center justify-center px-6">
       <div className="text-center max-w-2xl mx-auto">
@@ -29,12 +32,11 @@ const NotFound = () => {
               fontFamily: "'Tomorrow', sans-serif"
             }}
           >
-            PAGE NOT FOUND
+            {CONFIG.text.notFound.title[lang]}
           </h2>
           
           <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed">
-            The page you're looking for doesn't exist or has been moved. 
-            Let's get you back on track.
+            {CONFIG.text.notFound.description[lang]}
           </p>
 
           {/* Action Buttons */}
@@ -48,7 +50,7 @@ const NotFound = () => {
                 }}
               >
                 <Home className="mr-2 w-5 h-5" />
-                GO HOME
+                {CONFIG.text.notFound.goHome[lang]}
               </Button>
             </Link>
 
@@ -61,7 +63,7 @@ const NotFound = () => {
               }}
             >
               <ArrowLeft className="mr-2 w-5 h-5 inline" />
-              GO BACK
+              {CONFIG.text.notFound.goBack[lang]}
             </button>
           </div>
         </div>
@@ -69,7 +71,7 @@ const NotFound = () => {
         {/* Additional Help */}
         <div className="text-white/70 text-sm">
           <p>
-            Need help? Contact us at{' '}
+            {CONFIG.text.notFound.needHelp[lang]}{' '}
             <a 
               href="https://x.com/grainzeth" 
               target="_blank" 

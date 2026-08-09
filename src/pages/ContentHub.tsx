@@ -5,8 +5,11 @@ import { Waves } from '@/components/ui/waves-background';
 import { CardContainer, CardBody, CardItem } from '@/components/ui/3d-card-effect';
 import { useHashnodePosts } from '@/hooks/useHashnodePosts';
 import SEO from '@/components/SEO';
+import { CONFIG } from '@/config/constants';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const ContentHub = () => {
+  const lang = useLanguage();
   const [selectedTagSlug, setSelectedTagSlug] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -58,8 +61,8 @@ const ContentHub = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
       <SEO
-        title="Content Hub"
-        description="Explore the latest articles, insights, and news from GRAINZ."
+        title={CONFIG.text.contentHub.title[lang]}
+        description={CONFIG.text.contentHub.description[lang]}
         url="https://grainz.site/content-hub"
       />
       {/* Waves Animation Background */}
@@ -78,7 +81,7 @@ const ContentHub = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
-              placeholder="Search articles"
+              placeholder={CONFIG.text.contentHub.searchPlaceholder[lang]}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-[#C8102E] focus:border-[#C8102E] transition-all"
@@ -101,7 +104,7 @@ const ContentHub = () => {
                     : "bg-white text-gray-700 border-gray-200 hover:border-[#C8102E]/40"
                 }`}
               >
-                All
+                {CONFIG.text.contentHub.allArticles[lang]}
               </button>
               {availableTags.map((t) => (
                 <button
@@ -131,7 +134,7 @@ const ContentHub = () => {
                   }`}
                 >
                   <span className="mr-3 text-base">📄</span>
-                  All Articles
+                  {CONFIG.text.contentHub.allArticles[lang]}
                 </button>
                 {availableTags.map((t) => (
                   <button
@@ -155,18 +158,18 @@ const ContentHub = () => {
             <div className="flex-1">
               {postsQuery.isLoading && (
                 <div className="py-16 text-center text-gray-600">
-                  Loading articles…
+                  {CONFIG.text.contentHub.loading[lang]}
                 </div>
               )}
 
               {postsQuery.isError && (
                 <div className="py-16 text-center">
-                  <p className="text-gray-700 mb-4">Articles couldn’t be loaded.</p>
+                  <p className="text-gray-700 mb-4">{CONFIG.text.contentHub.error[lang]}</p>
                   <button
                     onClick={() => postsQuery.refetch()}
                     className="px-4 py-2 text-sm bg-[#C8102E] text-white rounded-lg hover:bg-[#C8102E]/90 transition-colors"
                   >
-                    Try again
+                    {CONFIG.text.contentHub.tryAgain[lang]}
                   </button>
                 </div>
               )}
@@ -210,8 +213,8 @@ const ContentHub = () => {
                             translateZ="30"
                             className="flex items-center justify-between text-xs text-gray-500"
                           >
-                            <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-                            <span>{post.readTimeInMinutes} min read</span>
+                            <span>{new Date(post.publishedAt).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                            <span>{post.readTimeInMinutes} {CONFIG.text.contentHub.minRead[lang]}</span>
                           </CardItem>
                         </div>
                       </CardBody>
@@ -222,7 +225,7 @@ const ContentHub = () => {
 
                   {filteredPosts.length === 0 && (
                     <div className="text-center py-16">
-                      <p className="text-gray-500 text-lg">No articles found matching your search.</p>
+                      <p className="text-gray-500 text-lg">{CONFIG.text.contentHub.noMatch[lang]}</p>
                     </div>
                   )}
 
@@ -234,7 +237,7 @@ const ContentHub = () => {
                         disabled={postsQuery.isFetchingNextPage}
                         className="px-6 py-3 text-sm bg-[#C8102E] text-white rounded-lg hover:bg-[#C8102E]/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
                       >
-                        {postsQuery.isFetchingNextPage ? "Loading…" : "Load more"}
+                        {postsQuery.isFetchingNextPage ? CONFIG.text.contentHub.loadingMore[lang] : CONFIG.text.contentHub.loadMore[lang]}
                       </button>
                     </div>
                   )}
@@ -242,7 +245,7 @@ const ContentHub = () => {
                   {/* Empty publication */}
                   {allPosts.length === 0 && (
                     <div className="text-center py-16">
-                      <p className="text-gray-500 text-lg">No posts yet. Publish on Hashnode and they’ll show up here automatically.</p>
+                      <p className="text-gray-500 text-lg">{CONFIG.text.contentHub.noPostsYet[lang]}</p>
                     </div>
                   )}
                 </>
@@ -265,7 +268,7 @@ const ContentHub = () => {
           >
             GRAINZ
           </button>
-          {' '}All rights reserved.
+          {' '}{lang === 'tr' ? 'Tüm hakları saklıdır.' : 'All rights reserved.'}
         </p>
       </div>
 
