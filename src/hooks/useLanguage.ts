@@ -1,29 +1,46 @@
 import { useState, useEffect } from 'react';
 
+export const setGlobalLanguage = (newLang: 'en' | 'tr') => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('grainz_language_pref', newLang);
+    window.dispatchEvent(new CustomEvent('grainz_language_change', { detail: newLang }));
+  }
+};
+
 export const useLanguage = () => {
-  const [lang, setLang] = useState<'en' | 'tr'>('en');
+  const [lang, setLang] = useState<'en' | 'tr'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('grainz_language_pref');
+      if (saved === 'en' || saved === 'tr') return saved;
+
+      const nav = navigator as unknown as { userLanguage?: string };
+      const browserLang = navigator.language || nav.userLanguage;
+      if (browserLang && browserLang.toLowerCase().startsWith('tr')) return 'tr';
+    }
+    return 'en';
+  });
 
   useEffect(() => {
-    // Only access navigator in browser environment
-    if (typeof navigator === 'undefined') return;
+    if (typeof window === 'undefined') return;
 
-    const checkAndSetLanguage = () => {
-      const browserLang = navigator.language || (navigator as any).userLanguage;
-      if (browserLang && browserLang.toLowerCase().startsWith('tr')) {
-        setLang('tr');
-      } else {
-        setLang('en');
-      }
+    const handleLanguageChange = (e: CustomEvent) => {
+      setLang(e.detail);
     };
 
-    // Initial check
-    checkAndSetLanguage();
+    const checkAndSetLanguage = () => {
+      if (localStorage.getItem('grainz_language_pref')) return;
+      const nav = navigator as unknown as { userLanguage?: string };
+      const browserLang = navigator.language || nav.userLanguage;
+      const newLang = browserLang && browserLang.toLowerCase().startsWith('tr') ? 'tr' : 'en';
+      setLang(newLang);
+    };
 
-    // Listen for language changes
     window.addEventListener('languagechange', checkAndSetLanguage);
+    window.addEventListener('grainz_language_change', handleLanguageChange as EventListener);
 
     return () => {
       window.removeEventListener('languagechange', checkAndSetLanguage);
+      window.removeEventListener('grainz_language_change', handleLanguageChange as EventListener);
     };
   }, []);
 
