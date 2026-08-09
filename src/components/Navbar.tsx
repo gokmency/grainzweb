@@ -17,9 +17,9 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <div className="relative flex items-center h-16 md:h-20">
+        <div className="relative flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center z-10">
+          <Link to="/" className="flex items-center z-10 shrink-0">
             <img
               src="/grainz-logo.png"
               alt="GRAINZ Logo"
@@ -37,7 +37,7 @@ const Navbar = () => {
           </Link>
 
           {/* Center Toggle Nav (like the original Home/Content Hub buttons) */}
-          <div className="absolute left-1/2 -translate-x-1/2 z-10">
+          <div className="static md:absolute md:left-1/2 md:-translate-x-1/2 z-10 ml-auto md:ml-0">
             <div
               className={`flex items-center border-2 overflow-hidden ${
                 isContentHubPage ? "border-[#C8102E]" : "border-white"
@@ -78,7 +78,7 @@ const Navbar = () => {
           </div>
 
           {/* Right spacer to keep center aligned on small screens */}
-          <div className="ml-auto w-10 md:w-12" aria-hidden />
+          <div className="hidden md:block md:w-12 md:ml-auto" aria-hidden />
         </div>
       </div>
     </nav>
