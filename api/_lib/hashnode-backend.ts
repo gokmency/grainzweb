@@ -165,12 +165,98 @@ export async function fetchAllPosts(signal?: AbortSignal): Promise<(HashnodePost
     });
 
     const posts = Array.from(postsMap.values());
-    posts.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
-    return posts;
+    const dummyPosts = [
+      {
+        id: "dummy-1",
+        title: "Welcome to GRAINZ: Building the Future",
+        slug: "welcome-to-grainz",
+        brief: "An introduction to how GRAINZ is redefining digital experiences through design and development.",
+        url: "https://grainz.site/content-hub/article/welcome-to-grainz",
+        publishedAt: new Date().toISOString(),
+        readTimeInMinutes: 3,
+        coverImage: null,
+        tags: [{ name: "Design", slug: "design" }, { name: "Development", slug: "development" }],
+        _rawHtml: "<p>An introduction to how GRAINZ is redefining digital experiences through design and development.</p>"
+      },
+      {
+        id: "dummy-2",
+        title: "The Power of Community Driven Growth",
+        slug: "community-driven-growth",
+        brief: "Why community is at the heart of modern product success and how to build one effectively.",
+        url: "https://grainz.site/content-hub/article/community-driven-growth",
+        publishedAt: new Date(Date.now() - 86400000).toISOString(),
+        readTimeInMinutes: 5,
+        coverImage: null,
+        tags: [{ name: "Community", slug: "community" }],
+        _rawHtml: "<p>Why community is at the heart of modern product success and how to build one effectively.</p>"
+      },
+      {
+        id: "dummy-3",
+        title: "Navigating Web3: A Developer's Perspective",
+        slug: "navigating-web3",
+        brief: "Technical insights and challenges encountered while building decentralized applications.",
+        url: "https://grainz.site/content-hub/article/navigating-web3",
+        publishedAt: new Date(Date.now() - 172800000).toISOString(),
+        readTimeInMinutes: 7,
+        coverImage: null,
+        tags: [{ name: "Web3", slug: "web3" }, { name: "Development", slug: "development" }],
+        _rawHtml: "<p>Technical insights and challenges encountered while building decentralized applications.</p>"
+      }
+    ];
+
+    const allCombined = [...posts];
+    dummyPosts.forEach(dummy => {
+      if (!allCombined.find(p => p.slug === dummy.slug)) {
+        allCombined.push(dummy);
+      }
+    });
+
+    allCombined.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    return allCombined;
   } catch (err: any) {
     console.error("[Hashnode Backend] RSS fetch failed:", err);
-    return [];
+
+    // In case of error, still return dummy posts
+    const dummyPosts = [
+      {
+        id: "dummy-1",
+        title: "Welcome to GRAINZ: Building the Future",
+        slug: "welcome-to-grainz",
+        brief: "An introduction to how GRAINZ is redefining digital experiences through design and development.",
+        url: "https://grainz.site/content-hub/article/welcome-to-grainz",
+        publishedAt: new Date().toISOString(),
+        readTimeInMinutes: 3,
+        coverImage: null,
+        tags: [{ name: "Design", slug: "design" }, { name: "Development", slug: "development" }],
+        _rawHtml: "<p>An introduction to how GRAINZ is redefining digital experiences through design and development.</p>"
+      },
+      {
+        id: "dummy-2",
+        title: "The Power of Community Driven Growth",
+        slug: "community-driven-growth",
+        brief: "Why community is at the heart of modern product success and how to build one effectively.",
+        url: "https://grainz.site/content-hub/article/community-driven-growth",
+        publishedAt: new Date(Date.now() - 86400000).toISOString(),
+        readTimeInMinutes: 5,
+        coverImage: null,
+        tags: [{ name: "Community", slug: "community" }],
+        _rawHtml: "<p>Why community is at the heart of modern product success and how to build one effectively.</p>"
+      },
+      {
+        id: "dummy-3",
+        title: "Navigating Web3: A Developer's Perspective",
+        slug: "navigating-web3",
+        brief: "Technical insights and challenges encountered while building decentralized applications.",
+        url: "https://grainz.site/content-hub/article/navigating-web3",
+        publishedAt: new Date(Date.now() - 172800000).toISOString(),
+        readTimeInMinutes: 7,
+        coverImage: null,
+        tags: [{ name: "Web3", slug: "web3" }, { name: "Development", slug: "development" }],
+        _rawHtml: "<p>Technical insights and challenges encountered while building decentralized applications.</p>"
+      }
+    ];
+    return dummyPosts;
   }
 }
 

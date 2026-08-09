@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CONFIG } from '@/config/constants';
-import { useLanguage } from '@/hooks/useLanguage';
+import { useLanguage, setGlobalLanguage } from '@/hooks/useLanguage';
 
 const Navbar = () => {
   const location = useLocation();
@@ -16,6 +16,10 @@ const Navbar = () => {
 
   const isContentHubPage = location.pathname.startsWith('/content-hub');
   const isHomePage = location.pathname === '/';
+
+  const toggleLanguage = () => {
+    setGlobalLanguage(lang === 'en' ? 'tr' : 'en');
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-transparent">
@@ -47,6 +51,17 @@ const Navbar = () => {
               }`}
               style={{ fontFamily: "'Tomorrow', sans-serif" }}
             >
+              {isContentHubPage && (
+                <button
+                  onClick={toggleLanguage}
+                  className={`px-3 py-2 text-xs font-bold transition-all duration-300 ease-in-out border-r ${
+                    isContentHubPage ? "border-[#C8102E]/30 text-[#C8102E] hover:bg-[#C8102E]/10" : "border-white/30 text-white hover:bg-white/10"
+                  }`}
+                  title={lang === 'en' ? "Switch to Turkish" : "Switch to English"}
+                >
+                  {lang === 'en' ? 'TR' : 'EN'}
+                </button>
+              )}
               <Link
                 to="/"
                 className={`px-4 py-2 text-sm font-medium transition-all duration-300 ease-in-out border-r ${
