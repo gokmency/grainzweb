@@ -2,18 +2,20 @@ import React from 'react';
 import OutlineButton from '@/components/OutlineButton';
 import { CONFIG } from '@/config/constants';
 import { toast } from "sonner";
+import { useLanguage } from '@/hooks/useLanguage';
 
 export const WorkWithUs: React.FC = () => {
+  const lang = useLanguage();
   const handleDesignClick = () => {
-    toast.info("Design page coming soon!", {
-      description: "We are working hard to bring this page to life.",
+    toast.info(CONFIG.text.toasts.designComingSoon[lang], {
+      description: CONFIG.text.toasts.workingHard[lang],
       duration: 3000,
     });
   };
 
   const handleDevelopmentClick = () => {
-    toast.info("Development page coming soon!", {
-      description: "We are working hard to bring this page to life.",
+    toast.info(CONFIG.text.toasts.developmentComingSoon[lang], {
+      description: CONFIG.text.toasts.workingHard[lang],
       duration: 3000,
     });
   };
@@ -32,20 +34,20 @@ export const WorkWithUs: React.FC = () => {
         className="text-sm md:text-lg font-bold text-white mb-2 md:mb-4 text-center md:text-left"
         style={{ letterSpacing: '2px', fontFamily: "'Tomorrow', sans-serif" }}
       >
-        {CONFIG.text.workWithUs.title}
+        {CONFIG.text.workWithUs.title[lang]}
       </h2>
       <div className="grid grid-cols-2 gap-2 md:gap-3 mx-auto md:mx-0">
         <OutlineButton onClick={handleDesignClick} className="w-full">
-          Design
+          {CONFIG.text.buttons.design[lang]}
         </OutlineButton>
         <OutlineButton onClick={handleDevelopmentClick} className="w-full">
-          Development
+          {CONFIG.text.buttons.development[lang]}
         </OutlineButton>
         <OutlineButton onClick={handleCommunityClick} className="w-full">
-          Community
+          {CONFIG.text.buttons.community[lang]}
         </OutlineButton>
         <OutlineButton onClick={handleJoinTeamClick} className="w-full">
-          Join our team
+          {CONFIG.text.buttons.joinTeam[lang]}
         </OutlineButton>
       </div>
     </div>

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { TEAM_MEMBERS } from "../config/constants";
+import { useLanguage } from "../hooks/useLanguage";
 
 const TeamPhotos: React.FC = () => {
+  const lang = useLanguage();
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -273,7 +275,7 @@ const TeamPhotos: React.FC = () => {
             
             {/* Bio */}
             <div className="text-gray-700 leading-relaxed text-sm" style={{ fontFamily: "'Tomorrow', sans-serif" }}>
-              {activeMember?.bio}
+              {activeMember?.bio[lang]}
             </div>
           </div>
         </div>,

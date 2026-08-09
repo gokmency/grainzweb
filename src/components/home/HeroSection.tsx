@@ -1,7 +1,9 @@
 import React from 'react';
 import { CONFIG } from '@/config/constants';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export const HeroSection: React.FC = () => {
+  const lang = useLanguage();
   return (
     <>
       {/* Desktop Hero - Central Hexagon */}
@@ -21,7 +23,7 @@ export const HeroSection: React.FC = () => {
                 fontFamily: "'Tomorrow', sans-serif"
               }}
             >
-              {CONFIG.text.heroTitle}
+              {CONFIG.text.heroTitle[lang]}
             </h1>
           </div>
         </div>
@@ -37,7 +39,7 @@ export const HeroSection: React.FC = () => {
             lineHeight: '1.1'
           }}
         >
-          {CONFIG.text.heroTitle}
+          {CONFIG.text.heroTitle[lang]}
         </h1>
       </div>
     </>
