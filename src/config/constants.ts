@@ -15,7 +15,44 @@ export const CONFIG = {
   text: {
     heroTitle: {
       en: 'WE BUILD THINGS',
-      tr: 'BİZ ÜRETİRİZ'
+      tr: 'FİKİRLERİ İNŞA EDİYORUZ'
+    },
+    nav: {
+      home: { en: 'Home', tr: 'Ana Sayfa' },
+      contentHub: { en: 'Content Hub', tr: 'İçerik Merkezi' },
+    },
+    contentHub: {
+      title: { en: 'Content Hub', tr: 'İçerik Merkezi' },
+      description: { en: 'Explore the latest articles, insights, and news from GRAINZ.', tr: 'GRAINZ\'den en son makaleleri, içgörüleri ve haberleri keşfedin.' },
+      searchPlaceholder: { en: 'Search articles', tr: 'Makale ara' },
+      allArticles: { en: 'All Articles', tr: 'Tüm Makaleler' },
+      loading: { en: 'Loading articles…', tr: 'Makaleler yükleniyor…' },
+      error: { en: 'Articles couldn’t be loaded.', tr: 'Makaleler yüklenemedi.' },
+      tryAgain: { en: 'Try again', tr: 'Tekrar dene' },
+      noMatch: { en: 'No articles found matching your search.', tr: 'Aramanızla eşleşen makale bulunamadı.' },
+      loadMore: { en: 'Load more', tr: 'Daha fazla yükle' },
+      loadingMore: { en: 'Loading…', tr: 'Yükleniyor…' },
+      noPostsYet: { en: 'No posts yet. Publish on Hashnode and they’ll show up here automatically.', tr: 'Henüz gönderi yok. Hashnode\'da yayınlayın, burada otomatik olarak görünecekler.' },
+      minRead: { en: 'min read', tr: 'dk okuma' }
+    },
+    blogDetail: {
+      loading: { en: 'Loading article…', tr: 'Makale yükleniyor…' },
+      error: { en: 'Couldn’t load article', tr: 'Makale yüklenemedi' },
+      tryAgain: { en: 'Try again', tr: 'Tekrar dene' },
+      notFoundTitle: { en: 'Article not found', tr: 'Makale bulunamadı' },
+      backToHub: { en: '← Back to Content Hub', tr: '← İçerik Merkezine Dön' },
+      backToHubShort: { en: 'Back to Content Hub', tr: 'İçerik Merkezine Dön' },
+      minRead: { en: 'min read', tr: 'dk okuma' },
+      by: { en: 'By', tr: 'Yazar:' },
+      share: { en: 'Share', tr: 'Paylaş' },
+      relatedArticles: { en: 'Related Articles', tr: 'İlgili Makaleler' }
+    },
+    notFound: {
+      title: { en: 'PAGE NOT FOUND', tr: 'SAYFA BULUNAMADI' },
+      description: { en: "The page you're looking for doesn't exist or has been moved. Let's get you back on track.", tr: 'Aradığınız sayfa mevcut değil veya taşınmış. Sizi tekrar yolunuza koyalım.' },
+      goHome: { en: 'GO HOME', tr: 'ANA SAYFAYA GİT' },
+      goBack: { en: 'GO BACK', tr: 'GERİ DÖN' },
+      needHelp: { en: 'Need help? Contact us at', tr: 'Yardıma mı ihtiyacınız var? Bize ulaşın:' }
     },
     whatWeDo: {
       title: {

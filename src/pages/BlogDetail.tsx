@@ -5,8 +5,11 @@ import { Waves } from '@/components/ui/waves-background';
 import { useHashnodePost } from '@/hooks/useHashnodePost';
 import { useHashnodePosts } from '@/hooks/useHashnodePosts';
 import SEO from '@/components/SEO';
+import { CONFIG } from '@/config/constants';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const BlogDetail = () => {
+  const lang = useLanguage();
   const { slug } = useParams();
 
   const postQuery = useHashnodePost(slug);
@@ -32,9 +35,9 @@ const BlogDetail = () => {
   if (postQuery.isLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center px-6">
-        <SEO title="Loading..." />
+        <SEO title={CONFIG.text.blogDetail.loading[lang]} />
         <div className="text-center">
-          <p className="text-gray-600">Loading article…</p>
+          <p className="text-gray-600">{CONFIG.text.blogDetail.loading[lang]}</p>
         </div>
       </div>
     );
@@ -43,14 +46,14 @@ const BlogDetail = () => {
   if (postQuery.isError) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center px-6">
-        <SEO title="Error" />
+        <SEO title={CONFIG.text.blogDetail.error[lang]} />
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Couldn’t load article</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{CONFIG.text.blogDetail.error[lang]}</h1>
           <button
             onClick={() => postQuery.refetch()}
             className="text-[#C8102E] hover:underline"
           >
-            Try again
+            {CONFIG.text.blogDetail.tryAgain[lang]}
           </button>
         </div>
       </div>
@@ -60,11 +63,11 @@ const BlogDetail = () => {
   if (!blogPost) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <SEO title="Article Not Found" />
+        <SEO title={CONFIG.text.blogDetail.notFoundTitle[lang]} />
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Article not found</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{CONFIG.text.blogDetail.notFoundTitle[lang]}</h1>
           <Link to="/content-hub" className="text-[#C8102E] hover:underline">
-            ← Back to Content Hub
+            {CONFIG.text.blogDetail.backToHub[lang]}
           </Link>
         </div>
       </div>
@@ -99,7 +102,7 @@ const BlogDetail = () => {
             className="inline-flex items-center text-gray-600 hover:text-[#C8102E] transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
-            Back to Content Hub
+            {CONFIG.text.blogDetail.backToHubShort[lang]}
           </Link>
         </div>
       </div>
@@ -126,7 +129,7 @@ const BlogDetail = () => {
             <div className="flex items-center text-gray-500 text-sm gap-6 mb-8 flex-wrap">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                <span>{new Date(blogPost.publishedAt).toLocaleDateString('en-US', { 
+                <span>{new Date(blogPost.publishedAt).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US', {
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
@@ -134,10 +137,10 @@ const BlogDetail = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                <span>{blogPost.readTimeInMinutes} min read</span>
+                <span>{blogPost.readTimeInMinutes} {CONFIG.text.blogDetail.minRead[lang]}</span>
               </div>
               <div>
-                By {blogPost.author?.name || blogPost.author?.username}
+                {CONFIG.text.blogDetail.by[lang]} {blogPost.author?.name || blogPost.author?.username}
               </div>
               <button 
                 onClick={() => navigator.share ? navigator.share({
@@ -148,7 +151,7 @@ const BlogDetail = () => {
                 className="flex items-center gap-1 text-[#C8102E] hover:text-[#A00E28] transition-colors"
               >
                 <Share2 className="w-4 h-4" />
-                Share
+                {CONFIG.text.blogDetail.share[lang]}
               </button>
             </div>
 
@@ -187,7 +190,7 @@ const BlogDetail = () => {
           {/* Related Articles */}
           {relatedPosts.length > 0 && (
             <section className="mt-16 pt-16 border-t border-gray-200">
-              <h3 className="text-2xl font-bold text-gray-900 mb-8">Related Articles</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">{CONFIG.text.blogDetail.relatedArticles[lang]}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {relatedPosts.map((post) => (
                   <Link to={`/content-hub/article/${post.slug}`} key={post.id}>
@@ -207,8 +210,8 @@ const BlogDetail = () => {
                           {post.brief}
                         </p>
                         <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span>{post.readTimeInMinutes} min read</span>
-                          <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                          <span>{post.readTimeInMinutes} {CONFIG.text.blogDetail.minRead[lang]}</span>
+                          <span>{new Date(post.publishedAt).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-US', { month: 'short', day: 'numeric' })}</span>
                         </div>
                       </div>
                     </article>
@@ -234,7 +237,7 @@ const BlogDetail = () => {
           >
             GRAINZ
           </button>
-          {' '}All rights reserved.
+          {' '}{lang === 'tr' ? 'Tüm hakları saklıdır.' : 'All rights reserved.'}
         </p>
       </div>
     </div>

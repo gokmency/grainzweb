@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { CONFIG } from '@/config/constants';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Navbar = () => {
   const location = useLocation();
+  const lang = useLanguage();
 
   const isActive = (path: string) => {
     if (path === '/content-hub') {
@@ -58,7 +61,7 @@ const Navbar = () => {
                       : "bg-transparent text-white hover:bg-white/10"
                 }`}
               >
-                Home
+                {CONFIG.text.nav.home[lang]}
               </Link>
               <Link
                 to="/content-hub"
@@ -72,7 +75,7 @@ const Navbar = () => {
                       : "bg-transparent text-white hover:bg-white/10"
                 }`}
               >
-                Content Hub
+                {CONFIG.text.nav.contentHub[lang]}
               </Link>
             </div>
           </div>
