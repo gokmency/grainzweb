@@ -15,7 +15,7 @@ export const CONFIG = {
   text: {
     heroTitle: {
       en: 'WE BUILD THINGS',
-      tr: 'FİKİRLERİ İNŞA EDİYORUZ'
+      tr: 'FİKİRLERİNİZİ İNŞA EDİYORUZ'
     },
     nav: {
       home: { en: 'Home', tr: 'Ana Sayfa' },
