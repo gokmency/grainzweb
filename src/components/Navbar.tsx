@@ -42,45 +42,6 @@ const Navbar = () => {
           {/* Center Nav Items */}
           <div className="static md:absolute md:left-1/2 md:-translate-x-1/2 z-10 ml-auto md:ml-0 flex items-center space-x-4">
 
-            {/* Language Toggle */}
-            <div
-              className={`flex items-center border-2 overflow-hidden ${
-                isContentHubPage ? "border-[#C8102E]" : "border-white"
-              }`}
-              style={{ fontFamily: "'Tomorrow', sans-serif" }}
-            >
-              <button
-                onClick={() => setGlobalLanguage('en')}
-                className={`px-3 py-2 text-sm font-medium transition-all duration-300 ease-in-out border-r ${
-                  isContentHubPage ? "border-[#C8102E]/30" : "border-white/30"
-                } ${
-                  lang === 'en'
-                    ? isContentHubPage
-                      ? "bg-[#C8102E] text-white"
-                      : "bg-white text-[#C8102E]"
-                    : isContentHubPage
-                      ? "bg-transparent text-[#C8102E] hover:bg-[#C8102E]/10"
-                      : "bg-transparent text-white hover:bg-white/10"
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setGlobalLanguage('tr')}
-                className={`px-3 py-2 text-sm font-medium transition-all duration-300 ease-in-out ${
-                  lang === 'tr'
-                    ? isContentHubPage
-                      ? "bg-[#C8102E] text-white"
-                      : "bg-white text-[#C8102E]"
-                    : isContentHubPage
-                      ? "bg-transparent text-[#C8102E] hover:bg-[#C8102E]/10"
-                      : "bg-transparent text-white hover:bg-white/10"
-                }`}
-              >
-                TR
-              </button>
-            </div>
-
             {/* Toggle Nav (Home/Content Hub) */}
             <div
               className={`flex items-center border-2 overflow-hidden ${
@@ -118,6 +79,45 @@ const Navbar = () => {
               >
                 {CONFIG.text.nav.contentHub[lang]}
               </Link>
+            </div>
+
+            {/* Language Toggle */}
+            <div
+              className={`flex items-center border-2 overflow-hidden ${
+                isContentHubPage ? "border-[#C8102E]" : "border-white"
+              }`}
+              style={{ fontFamily: "'Tomorrow', sans-serif" }}
+            >
+              <button
+                onClick={() => setGlobalLanguage('en')}
+                className={`px-3 py-2 text-sm font-medium transition-all duration-300 ease-in-out border-r ${
+                  isContentHubPage ? "border-[#C8102E]/30" : "border-white/30"
+                } ${
+                  lang === 'en'
+                    ? isContentHubPage
+                      ? "bg-[#C8102E] text-white"
+                      : "bg-white text-[#C8102E]"
+                    : isContentHubPage
+                      ? "bg-transparent text-[#C8102E] hover:bg-[#C8102E]/10"
+                      : "bg-transparent text-white hover:bg-white/10"
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setGlobalLanguage('tr')}
+                className={`px-3 py-2 text-sm font-medium transition-all duration-300 ease-in-out ${
+                  lang === 'tr'
+                    ? isContentHubPage
+                      ? "bg-[#C8102E] text-white"
+                      : "bg-white text-[#C8102E]"
+                    : isContentHubPage
+                      ? "bg-transparent text-[#C8102E] hover:bg-[#C8102E]/10"
+                      : "bg-transparent text-white hover:bg-white/10"
+                }`}
+              >
+                TR
+              </button>
             </div>
 
           </div>
