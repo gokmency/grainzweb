@@ -1,23 +1,16 @@
 import React from 'react';
 import OutlineButton from '@/components/OutlineButton';
 import { CONFIG } from '@/config/constants';
-import { toast } from "sonner";
 import { useLanguage } from '@/hooks/useLanguage';
 
 export const WorkWithUs: React.FC = () => {
   const lang = useLanguage();
   const handleDesignClick = () => {
-    toast.info(CONFIG.text.toasts.designComingSoon[lang], {
-      description: CONFIG.text.toasts.workingHard[lang],
-      duration: 3000,
-    });
+    window.open(CONFIG.links.grainzStudioInstagram, '_blank');
   };
 
   const handleDevelopmentClick = () => {
-    toast.info(CONFIG.text.toasts.developmentComingSoon[lang], {
-      description: CONFIG.text.toasts.workingHard[lang],
-      duration: 3000,
-    });
+    window.open(CONFIG.links.grainzDigital, '_blank');
   };
 
   const handleCommunityClick = () => {
