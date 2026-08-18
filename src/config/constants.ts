@@ -11,6 +11,8 @@ export const CONFIG = {
   links: {
     grainzLegacy: 'https://grainzlegacy.vercel.app/',
     joinTeamTypeform: 'https://form.typeform.com/to/wWliUJsu',
+    grainzDigital: 'https://grainzdigital.com',
+    grainzStudioInstagram: 'https://www.instagram.com/grainzstudio/',
   },
   text: {
     heroTitle: {
